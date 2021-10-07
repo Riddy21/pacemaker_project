@@ -1,7 +1,6 @@
 from gui import GUI
 
 def main():
-    print('Hello World')
     gui = GUI()
 
     gui.loop()
