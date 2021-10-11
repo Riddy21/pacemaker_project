@@ -8,8 +8,9 @@ class GUI(object):
 
         # Setup window
         self.window.title("DCM")
-        self.window.geometry("500x500")
-        self.window.resizable(0, 0)
+        self.window.resizable(1, 1)
+        self.window.minsize(500, 450)
+        
 
         # Make GUI frame
         self.frame = tk.Frame()
@@ -33,10 +34,10 @@ class GUI(object):
 
         # Create a frame and pack with interface
         self.frame = tk.Frame(self.window)
-        title = tk.Label(self.frame, width=50, text="Welcome to Group 20's \npacemaker DCM!")
-        register = tk.Button(self.frame, text="Create a New Account", width=50, pady=50, command=lambda: self.create_register_screen())
-        login = tk.Button(self.frame, text='Login to existing account', width=50, pady=50, command=lambda: self.create_login_screen())
-        close = tk.Button(self.frame, text='Close', width=50, pady=20, command=lambda: self.quit_win())
+        title = tk.Label(self.frame, width=50, text="Welcome to Group 20's \npacemaker DCM!", pady=60)
+        register = tk.Button(self.frame, text="Create a New Account", width=50, pady=30, command=lambda: self.create_register_screen())
+        login = tk.Button(self.frame, text='Login to existing account', width=50, pady=30, command=lambda: self.create_login_screen())
+        close = tk.Button(self.frame, text='Close', width=50, pady=10, command=lambda: self.quit_win())
         title.grid(row=0)
         register.grid(row=1)
         login.grid(row=2)
@@ -103,23 +104,19 @@ class GUI(object):
         # create a frame and pack with interface
         self.frame = tk.Frame(self.window)
 
-        # Operating modes
-        modes_label = tk.Label(self.frame, text='Operating Modes')
-        aoo = tk.Button(self.frame, text='AOO')
-        voo = tk.Button(self.frame, text='VOO')
-        aai = tk.Button(self.frame, text='AAI')
-        vvi = tk.Button(self.frame, text='VVI')
+        # Resize window
+        self.window.minsize(800, 450)
 
         # Parameters
-        parameter_label = tk.Label(self.frame, text='DCM Parameters')
-        lower_rate_limit = tk.Label(self.frame, text='Lower rate limit') #all
-        upper_rate_limit = tk.Label(self.frame, text='Lower rate limit')#all
-        atrial_amplitude = tk.Label(self.frame, text='Lower rate limit')#AOO, AAI
-        atrial_pw = tk.Label(self.frame, text='Lower rate limit')#AAO, AAI
-        ventricular_amplitude = tk.Label(self.frame, text='Lower rate limit')#VOO, VVI
-        ventricular_pw = tk.Label(self.frame, text='Lower rate limit')#VOO, VVI
-        vrp = tk.Label(self.frame, text='Lower rate limit')#VVI
-        arp = tk.Label(self.frame, text='Lower rate limit')#AAI
+        parameter_label = tk.Label(self.frame, text='DCM Parameters', pady=15)
+        lower_rate_limit = tk.Label(self.frame, text='Lower rate limit', pady=10) #all
+        upper_rate_limit = tk.Label(self.frame, text='Upper rate limit', pady=10)#all
+        atrial_amplitude = tk.Label(self.frame, text='Atrial amplitude', pady=10)#AOO, AAI
+        atrial_pw = tk.Label(self.frame, text='Atrial PW', pady=10)#AAO, AAI
+        ventricular_amplitude = tk.Label(self.frame, text='Ventricular Amplitude', pady=10)#VOO, VVI
+        ventricular_pw = tk.Label(self.frame, text='Ventyricular PW', pady=10)#VOO, VVI
+        vrp = tk.Label(self.frame, text='CRP', pady=10)#VVI
+        arp = tk.Label(self.frame, text='ARP', pady=10)#AAI
 
         lower_rate_limit_entry = tk.Entry(self.frame) #all
         upper_rate_limit_entry = tk.Entry(self.frame) #all
@@ -129,18 +126,60 @@ class GUI(object):
         ventricular_pw_entry = tk.Entry(self.frame) #VOO, VVI
         vrp_entry = tk.Entry(self.frame) #VVI
         arp_entry = tk.Entry(self.frame) #AAI
+
+        # Operating modes
+        modes_label = tk.Label(self.frame, text='Operating Modes', pady=15)
+        aoo = tk.Button(self.frame, text='AOO', width=10, height=5)
+        voo = tk.Button(self.frame, text='VOO', width=10, height=5)
+        aai = tk.Button(self.frame, text='AAI', width=10, height=5)
+        vvi = tk.Button(self.frame, text='VVI', width=10, height=5)
         
         # Status
-        status_label = tk.Label(self.frame, text='Status')
+        status_label = tk.Label(self.frame, text='Status', pady=15)
         device_connection = tk.Label(self.frame, fg='red', text='Device disconnected')
         device_information = tk.Label(self.frame, fg='red', text='No device data available')
 
         # TODO: Change to logout procedure
-        logout_Button = tk.Button(self.frame, text='Logout', command=lambda: self.create_welcome_screen())
+        logout_button = tk.Button(self.frame, text='Logout', command=lambda: self.create_welcome_screen())
+        close_button = tk.Button(self.frame, text='Close', command=lambda: self.quit_win())
 
-        parameter_label.grid(row=0, column=0)
-        modes_label.grid(row=0, column=1)
-        status_label.grid(row=0, column=2)
+        # Title locations
+        parameter_label.grid(row=0, column=0, columnspan=2)
+        modes_label.grid(row=0, column=2)
+        status_label.grid(row=0, column=3)
+
+        # Parameter button locations
+        lower_rate_limit.grid(row=1, column=0)
+        upper_rate_limit.grid(row=2, column=0)
+        atrial_amplitude.grid(row=3, column=0)
+        atrial_pw.grid(row=4, column=0)
+        ventricular_amplitude.grid(row=5, column=0)
+        ventricular_pw.grid(row=6, column=0)
+        vrp.grid(row=7, column=0)
+        arp.grid(row=8, column=0)
+
+        lower_rate_limit_entry.grid(row=1, column=1)
+        upper_rate_limit_entry.grid(row=2, column=1)
+        atrial_amplitude_entry.grid(row=3, column=1)
+        atrial_pw_entry.grid(row=4, column=1)
+        ventricular_amplitude_entry.grid(row=5, column=1)
+        ventricular_pw_entry.grid(row=6, column=1)
+        vrp_entry.grid(row=7, column=1)
+        arp_entry.grid(row=8, column=1)
+
+        # Operating mode buttons
+        aoo.grid(row=1, column=2, rowspan=2)
+        voo.grid(row=3, column=2, rowspan=2)
+        aai.grid(row=5, column=2, rowspan=2)
+        vvi.grid(row=7, column=2, rowspan=2)
+
+        # Status
+        device_connection.grid(row=1, column=3, columnspan=2)
+        device_information.grid(row=3, column=3, columnspan=2)
+
+        # exit buttons
+        logout_button.grid(row=9, column=0, columnspan=2)
+        close_button.grid(row=9, column=2, columnspan=2)
 
         self.frame.pack()
 
