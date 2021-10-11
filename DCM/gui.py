@@ -8,7 +8,7 @@ class GUI(object):
 
         # Setup window
         self.window.title("DCM")
-        self.window.resizable(1, 1)
+        self.window.resizable(1, 1) 
         self.window.minsize(500, 450)
         
 
@@ -32,6 +32,9 @@ class GUI(object):
         # Delete previous frame
         self.frame.destroy()
 
+        self.window.resizable(1, 1) 
+        self.window.minsize(500, 450)
+
         # Create a frame and pack with interface
         self.frame = tk.Frame(self.window)
         title = tk.Label(self.frame, width=50, text="Welcome to Group 20's \npacemaker DCM!", pady=60)
@@ -51,16 +54,19 @@ class GUI(object):
         # Delete previous frame
         self.frame.destroy()
 
+        self.window.resizable(1, 1) 
+        self.window.minsize(500, 300)
+
         # Create a frame and pack with interface
         self.frame = tk.Frame(self.window)
-        title = tk.Label(self.frame, width=50, text='Login')
-        username = tk.Label(self.frame, text='Username')
-        password = tk.Label(self.frame, text='Password')
+        title = tk.Label(self.frame, width=50, text='Login', pady=25)
+        username = tk.Label(self.frame, text='Username',pady=10)
+        password = tk.Label(self.frame, text='Password',pady=10)
         usernameEntry = tk.Entry(self.frame)
         passwordEntry = tk.Entry(self.frame)
         # TODO: redirect to verification
-        loginButton = tk.Button(self.frame, text='Login', command=lambda: self.create_dcm_screen())
-        backButton = tk.Button(self.frame, text='Back', command=lambda: self.create_welcome_screen())
+        loginButton = tk.Button(self.frame, text='Login', pady=5, width=15, command=lambda: self.create_dcm_screen())
+        backButton = tk.Button(self.frame, text='Back', pady=5, width=15, command=lambda: self.create_welcome_screen())
         title.grid(row=0, columnspan=2)
         username.grid(row=1, column=0)
         usernameEntry.grid(row=1, column=1)
@@ -76,16 +82,19 @@ class GUI(object):
         # Delete previous frames
         self.frame.destroy()
         
+        self.window.resizable(1, 1) 
+        self.window.minsize(500, 300)
+
         # Create a frame and pack with interface
         self.frame = tk.Frame(self.window)
-        title = tk.Label(self.frame, width=50, text='Create a New User')
-        username = tk.Label(self.frame, text='Username')
-        password = tk.Label(self.frame, text='Password')
+        title = tk.Label(self.frame, width=50, text='Create a New User', pady=25)
+        username = tk.Label(self.frame, text='Username', pady=10)
+        password = tk.Label(self.frame, text='Password', pady=10)
         usernameEntry = tk.Entry(self.frame)
         passwordEntry = tk.Entry(self.frame)
         # TODO: redirect to verification
-        submitButton = tk.Button(self.frame, text='Submit', command=lambda:self.create_dcm_screen())
-        backButton = tk.Button(self.frame, text='Back', command=lambda: self.create_welcome_screen())
+        submitButton = tk.Button(self.frame, text='Submit', pady=5, width=15, command=lambda:self.create_dcm_screen())
+        backButton = tk.Button(self.frame, text='Back', pady=5, width=15, command=lambda: self.create_welcome_screen())
         title.grid(row=0, columnspan=2)
         username.grid(row=1, column=0)
         usernameEntry.grid(row=1, column=1)
