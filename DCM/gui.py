@@ -1,5 +1,6 @@
 import tkinter as tk
 from tkinter.constants import W
+from db import create_user, get_user
 
 class GUI(object):
     def __init__(self):
@@ -27,6 +28,18 @@ class GUI(object):
         # Update loop
         self.update()
 
+    def on_submit_login(self, username: str, password: str):
+        query = get_user(username)
+        if (len(query) == 0):
+            # user not found
+            self.create_dcm_screen()
+        elif query[0]['password'] == password:
+            self.create_dcm_screen()
+    
+    def on_submit_register(self, username: str, password: str):
+        create_user(username, password)
+        self.create_dcm_screen()
+    
     # Creates menu GUI
     def create_welcome_screen(self):
         # Delete previous frame
@@ -49,7 +62,6 @@ class GUI(object):
 
         self.state = 'Welcome'
 
-
     def create_login_screen(self):
         # Delete previous frame
         self.frame.destroy()
@@ -65,7 +77,7 @@ class GUI(object):
         usernameEntry = tk.Entry(self.frame)
         passwordEntry = tk.Entry(self.frame)
         # TODO: redirect to verification
-        loginButton = tk.Button(self.frame, text='Login', pady=5, width=15, command=lambda: self.create_dcm_screen())
+        loginButton = tk.Button(self.frame, text='Login', pady=5, width=15, command=lambda: self.on_submit_login(usernameEntry.get(),passwordEntry.get()))
         backButton = tk.Button(self.frame, text='Back', pady=5, width=15, command=lambda: self.create_welcome_screen())
         title.grid(row=0, columnspan=2)
         username.grid(row=1, column=0)
@@ -93,7 +105,7 @@ class GUI(object):
         usernameEntry = tk.Entry(self.frame)
         passwordEntry = tk.Entry(self.frame)
         # TODO: redirect to verification
-        submitButton = tk.Button(self.frame, text='Submit', pady=5, width=15, command=lambda:self.create_dcm_screen())
+        submitButton = tk.Button(self.frame, text='Submit', pady=5, width=15, command=lambda:self.on_submit_register(usernameEntry.get(),passwordEntry.get()))
         backButton = tk.Button(self.frame, text='Back', pady=5, width=15, command=lambda: self.create_welcome_screen())
         title.grid(row=0, columnspan=2)
         username.grid(row=1, column=0)
