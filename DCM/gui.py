@@ -29,16 +29,18 @@ class GUI(object):
         self.update()
 
     def on_submit_login(self, username: str, password: str):
-        query = get_user(username)
-        if (len(query) == 0):
+        user = get_user(username)
+        if user is None:
             # user not found
             self.create_dcm_screen()
-        elif query[0]['password'] == password:
+        elif user['password'] == password:
             self.create_dcm_screen()
     
     def on_submit_register(self, username: str, password: str):
-        create_user(username, password)
-        self.create_dcm_screen()
+        user_created = create_user(username, password)
+        if user_created:
+            self.create_dcm_screen()
+        # else: user with username already exists
     
     # Creates menu GUI
     def create_welcome_screen(self):
