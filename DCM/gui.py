@@ -35,12 +35,17 @@ class GUI(object):
             self.create_dcm_screen()
         elif user['password'] == password:
             self.create_dcm_screen()
+        else:
+            tk.Label(self.frame, width=50, text="Incorrect password.", pady=60).grid(row=4,columnspan=2)
     
     def on_submit_register(self, username: str, password: str):
+        if(len(username)==0 or len(password)==0):
+            tk.Label(self.frame, width=50, text="Username and password cannot be empty.", pady=60).grid(row=4,columnspan=2)
         user_created = create_user(username, password)
         if user_created:
             self.create_dcm_screen()
-        # else: user with username already exists
+        else:
+            tk.Label(self.frame, width=50, text="User with that username already exists.", pady=60).grid(row=4,columnspan=2)
     
     # Creates menu GUI
     def create_welcome_screen(self):
