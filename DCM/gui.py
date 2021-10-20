@@ -52,14 +52,14 @@ class GUI(object):
         else:
             tk.Label(self.frame, width=50, text="Incorrect password.", pady=60).grid(row=4,columnspan=2)
     
-    def on_submit_register(self, username: str, password: str):
+    def _on_submit_register(self, username: str, password: str):
         user_created = create_user(username, password)
         if (get_number_of_users() >= 10):
             tk.Label(self.frame, width=50, text="Maximum number of users reached.", pady=60).grid(row=4,columnspan=2)
         elif(len(username)==0 or len(password)==0):
             tk.Label(self.frame, width=50, text="Username and password cannot be empty.", pady=60).grid(row=4,columnspan=2)
         elif user_created:
-            self.create_dcm_screen()
+            self._create_dcm_screen()
         else:
             tk.Label(self.frame, width=50, text="User with that username already exists.", pady=60).grid(row=4,columnspan=2)
 
