@@ -31,8 +31,7 @@ class GUI(object):
     def on_submit_login(self, username: str, password: str):
         user = get_user(username)
         if user is None:
-            # user not found
-            self.create_dcm_screen()
+            tk.Label(self.frame, width=50, text="User not found.", pady=60).grid(row=4,columnspan=2)
         elif user['password'] == password:
             self.create_dcm_screen()
         else:
