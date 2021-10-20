@@ -3,9 +3,9 @@ from tinydb import TinyDB, Query
 db = TinyDB('users.json')
 
 def create_user(username: str, password: str):
-    if (len(get_user(username)) != 0):
-        return False
-    db.insert({'username': username, 'password': password})
+    if get_user(username) is None:
+        db.insert({'username': username, 'password': password})
+        return True
     return True
 
 def get_user(username: str):
