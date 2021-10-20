@@ -4,7 +4,17 @@ db = TinyDB('users.json')
 
 def create_user(username: str, password: str):
     if get_user(username) is None:
-        db.insert({'username': username, 'password': password})
+        db.insert({'username': username,
+                   'password': password,
+                   'lower_rate_limit': '',
+                   'upper_rate_limit': '',
+                   'atrial_amplitude': '',
+                   'atrial_pw': '',
+                   'ventricular_amplitude': '',
+                   'ventricular_pw': '',
+                   'vrp': '',
+                   'arp': '',
+                   'operating_mode': ''})
         return True
     return False
 
