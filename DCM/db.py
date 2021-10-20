@@ -6,7 +6,7 @@ def create_user(username: str, password: str):
     if get_user(username) is None:
         db.insert({'username': username, 'password': password})
         return True
-    return True
+    return False
 
 def get_user(username: str):
     User = Query()
