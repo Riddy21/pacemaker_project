@@ -1,4 +1,5 @@
 import tkinter as tk
+import time
 from tkinter.constants import W
 from db import create_user, get_user
 
@@ -31,20 +32,28 @@ class GUI(object):
     def on_submit_login(self, username: str, password: str):
         user = get_user(username)
         if user is None:
-            tk.Label(self.frame, width=50, text="User not found.", pady=60).grid(row=4,columnspan=2)
+            self.display_error_message("User not found.")
         elif user['password'] == password:
             self.create_dcm_screen()
         else:
-            tk.Label(self.frame, width=50, text="Incorrect password.", pady=60).grid(row=4,columnspan=2)
+            self.display_error_message("Incorrect password")
     
     def on_submit_register(self, username: str, password: str):
-        if(len(username)==0 or len(password)==0):
-            tk.Label(self.frame, width=50, text="Username and password cannot be empty.", pady=60).grid(row=4,columnspan=2)
         user_created = create_user(username, password)
-        if user_created:
+        if(len(username)==0 or len(password)==0):
+            self.display_error_message("Username and password cannot be empty.")
+        elif user_created:
             self.create_dcm_screen()
         else:
-            tk.Label(self.frame, width=50, text="User with that username already exists.", pady=60).grid(row=4,columnspan=2)
+            self.display_error_message("Username with that username already exists.")
+
+    def display_error_message(self, msg):
+        frame = tk.Frame(self.window)
+        error = tk.Label(frame, width=50, text=msg, pady=60)
+        error.pack()
+        frame.update()
+        frame.after(1000, error.destroy())
+        frame.destroy
     
     # Creates menu GUI
     def create_welcome_screen(self):
@@ -82,7 +91,7 @@ class GUI(object):
         password = tk.Label(self.frame, text='Password',pady=10)
         usernameEntry = tk.Entry(self.frame)
         passwordEntry = tk.Entry(self.frame)
-        # TODO: redirect to verification
+        # redirect to verification
         loginButton = tk.Button(self.frame, text='Login', pady=5, width=15, command=lambda: self.on_submit_login(usernameEntry.get(),passwordEntry.get()))
         backButton = tk.Button(self.frame, text='Back', pady=5, width=15, command=lambda: self.create_welcome_screen())
         title.grid(row=0, columnspan=2)
@@ -110,7 +119,7 @@ class GUI(object):
         password = tk.Label(self.frame, text='Password', pady=10)
         usernameEntry = tk.Entry(self.frame)
         passwordEntry = tk.Entry(self.frame)
-        # TODO: redirect to verification
+        # redirect to verification
         submitButton = tk.Button(self.frame, text='Submit', pady=5, width=15, command=lambda:self.on_submit_register(usernameEntry.get(),passwordEntry.get()))
         backButton = tk.Button(self.frame, text='Back', pady=5, width=15, command=lambda: self.create_welcome_screen())
         title.grid(row=0, columnspan=2)
@@ -212,7 +221,6 @@ class GUI(object):
 
         self.state = "DCM"
 
-
     def quit_win(self):
         # console message
         print("Quitting DCM")
@@ -221,7 +229,6 @@ class GUI(object):
         self.window.quit()
 
         self.update()
-
 
     # Put gui in mainloop
     def loop(self):
