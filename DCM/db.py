@@ -23,3 +23,6 @@ def get_user(username: str):
     result = db.search(User.username == username)
     if (len(result)):
         return result[0]
+
+def get_number_of_users():
+    return len(db)

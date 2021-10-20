@@ -1,6 +1,6 @@
 import tkinter as tk
 from tkinter.constants import W
-from db import create_user, get_user
+from db import create_user, get_user, get_number_of_users
 from tkinter import messagebox
 
 class GUI(object):
@@ -52,11 +52,13 @@ class GUI(object):
         else:
             tk.Label(self.frame, width=50, text="Incorrect password.", pady=60).grid(row=4,columnspan=2)
     
-    def _on_submit_register(self, username: str, password: str):
-        if(len(username)==0 or len(password)==0):
-            tk.Label(self.frame, width=50, text="Username and password cannot be empty.", pady=60).grid(row=4,columnspan=2)
+    def on_submit_register(self, username: str, password: str):
         user_created = create_user(username, password)
-        if user_created:
+        if (get_number_of_users() >= 10):
+            tk.Label(self.frame, width=50, text="Maximum number of users reached.", pady=60).grid(row=4,columnspan=2)
+        elif(len(username)==0 or len(password)==0):
+            tk.Label(self.frame, width=50, text="Username and password cannot be empty.", pady=60).grid(row=4,columnspan=2)
+        elif user_created:
             self.create_dcm_screen()
         else:
             tk.Label(self.frame, width=50, text="User with that username already exists.", pady=60).grid(row=4,columnspan=2)
