@@ -76,6 +76,7 @@ class GUI(object):
         elif(len(username)==0 or len(password)==0):
             tk.Label(self.frame, width=50, text="Username and password cannot be empty.", pady=60).grid(row=4,columnspan=2)
         elif user_created:
+            self.user = get_user(username)
             self._create_dcm_screen()
         else:
             tk.Label(self.frame, width=50, text="User with that username already exists.", pady=60).grid(row=4,columnspan=2)
