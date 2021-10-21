@@ -3,3 +3,4 @@ __pycache__/
 .DS_Store
 *.swp
 /DCM/users.json
+users.json
