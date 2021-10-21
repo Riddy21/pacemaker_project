@@ -1,6 +1,7 @@
 from tinydb import TinyDB, Query
 
 db = TinyDB('users.json')
+UserQuery = Query()
 
 def create_user(username: str, password: str):
     if get_user(username) is None:
@@ -22,19 +23,16 @@ def create_user(username: str, password: str):
     return False
 
 def get_user(username: str):
-    User = Query()
-    result = db.search(User.username == username)
+    result = db.search(UserQuery.username == username)
     if (len(result)):
         return result[0]
 
 def get_number_of_users(device_id: int):
-    User = Query()
-    result = db.search(User.device_id == device_id)
+    result = db.search(UserQuery.device_id == device_id)
     return len(result)
 
 def update_parameters(username: str, parameters: {str:str}):
-    User = Query()
-    u = get_user(username)
+    user = get_user(username)
     for key in parameters:
-        u['parameters'][key] = parameters[key]
-    db.update({'parameters': u['parameters']}, User.username == username)
+        user['parameters'][key] = parameters[key]
+    db.update({'parameters': user['parameters']}, UserQuery.username == username)

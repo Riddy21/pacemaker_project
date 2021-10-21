@@ -10,7 +10,7 @@ def validate_lrl(lrl):
             return False, "Error: Must have 5ppm increments between 30 and 50 ppm"
     elif 50 <= lrl <= 90 :
         if (lrl % 1) == 0 :
-            return True
+            return True, ''
         else:
             return False, "Error: Must have 1ppm increments between 50 and 90 ppm"
     elif 90 <= lrl <= 175 :

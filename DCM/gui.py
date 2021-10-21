@@ -4,24 +4,24 @@ from db import create_user, get_user, get_number_of_users, update_parameters
 from tkinter import messagebox
 from validateentry import *
 
-AOO_PARAMETERS = ['lower_rate_limit_entry',
-                  'upper_rate_limit_entry',
-                  'atrial_amplitude_entry',
-                  'atrial_pw_entry']
-VOO_PARAMETERS = ['lower_rate_limit_entry',
-                  'upper_rate_limit_entry',
-                  'ventricular_amplitude_entry',
-                  'ventricular_pw_entry']
-AAI_PARAMETERS = ['lower_rate_limit_entry',
-                  'upper_rate_limit_entry',
-                  'atrial_amplitude_entry',
-                  'atrial_pw_entry',
-                  'arp_entry']
-VVI_PARAMETERS = ['lower_rate_limit_entry',
-                  'upper_rate_limit_entry',
-                  'ventricular_amplitude_entry',
-                  'ventricular_pw_entry',
-                  'vrp_entry']
+VALID_PARAMETERS = {'aoo': ['lower_rate_limit_entry',
+                            'upper_rate_limit_entry',
+                            'atrial_amplitude_entry',
+                            'atrial_pw_entry'],
+                    'voo': ['lower_rate_limit_entry',
+                            'upper_rate_limit_entry',
+                            'ventricular_amplitude_entry', 
+                            'ventricular_pw_entry'],
+                    'aai': ['lower_rate_limit_entry', 
+                            'upper_rate_limit_entry', 
+                            'atrial_amplitude_entry', 
+                            'atrial_pw_entry', 
+                            'arp_entry'],
+                    'vvi': ['lower_rate_limit_entry', 
+                            'upper_rate_limit_entry', 
+                            'ventricular_amplitude_entry', 
+                            'ventricular_pw_entry',
+                            'vrp_entry']}
 
 class GUI(object):
     def __init__(self):
@@ -193,10 +193,10 @@ class GUI(object):
 
         # Operating modes
         modes_label = tk.Label(self.frame, text='Operating Modes', pady=15)
-        self.modes_dict['aoo'] = tk.Button(self.frame, text='AOO', width=10, height=5, command=lambda: self._set_mode('aoo', AOO_PARAMETERS))
-        self.modes_dict['voo'] = tk.Button(self.frame, text='VOO', width=10, height=5, command=lambda: self._set_mode('voo', VOO_PARAMETERS))
-        self.modes_dict['aai'] = tk.Button(self.frame, text='AAI', width=10, height=5, command=lambda: self._set_mode('AAI', AAI_PARAMETERS))
-        self.modes_dict['vvi'] = tk.Button(self.frame, text='VVI', width=10, height=5, command=lambda: self._set_mode('VVI', VVI_PARAMETERS))
+        self.modes_dict['aoo'] = tk.Button(self.frame, text='AOO', width=10, height=5, command=lambda: self._set_mode('aoo'))
+        self.modes_dict['voo'] = tk.Button(self.frame, text='VOO', width=10, height=5, command=lambda: self._set_mode('voo'))
+        self.modes_dict['aai'] = tk.Button(self.frame, text='AAI', width=10, height=5, command=lambda: self._set_mode('aai'))
+        self.modes_dict['vvi'] = tk.Button(self.frame, text='VVI', width=10, height=5, command=lambda: self._set_mode('vvi'))
         
         # Status
         status_label = tk.Label(self.frame, text='Status', pady=15)
@@ -258,85 +258,42 @@ class GUI(object):
         
     def _load_user_defaults(self):
         # get the right state
-        #self.user['operating_mode']
         pass
 
-    
-    def _set_AOO_mode(self):
-        # disable the button
-        for mode, button in self.modes_dict.items():
-            if mode == 'aoo':
-                button['state'] = 'disabled'
-            else:
-                button['state'] = 'normal'
-
-        # enable all the currect entries
-        self.lower_rate_limit_entry['state'] = 'normal'
-        self.upper_rate_limit_entry['state'] = 'normal'
-        self.atrial_amplitude_entry['state'] = 'normal'
-        self.atrial_pw_entry['state'] = 'normal'
-        self.ventricular_amplitude_entry['state'] = 'disabled'
-        self.ventricular_pw_entry['state'] = 'disabled'
-        self.vrp_entry['state'] = 'disabled'
-        self.arp_entry['state'] = 'disabled'
-
-
-    def _set_mode(self, input_mode, valid_parameters):
+    def _set_mode(self, input_mode):
         # disable the button
         for mode, button in self.modes_dict.items():
             if mode == input_mode:
                 button['state'] = 'disabled'
+                self.mode = mode
             else:
                 button['state'] = 'normal'
 
         # enable all the currect entries
         for parameter, entry in self.parameters_dict.items():
-            if parameter in valid_parameters:
+            if parameter in VALID_PARAMETERS[mode]:
                 entry['state'] = 'normal'
             else:
                 entry['state'] = 'disabled'
 
-    def _set_AAI_mode(self):
-        # disable the button
-        for mode, button in self.modes_dict.items():
-            if mode == 'aai':
-                button['state'] = 'disabled'
-            else:
-                button['state'] = 'normal'
+    def _find_parameters_for_mode(self, parameters_dict, mode):
+        parameters_for_mode = dict()
+        for parameter, entry in parameters_dict.items():
+            if parameter in VALID_PARAMETERS[mode]:
+                parameters_for_mode[parameter] = entry
 
-        # enable all the currect entries
-        self.lower_rate_limit_entry['state'] = 'normal'
-        self.upper_rate_limit_entry['state'] = 'normal'
-        self.atrial_amplitude_entry['state'] = 'normal'
-        self.atrial_pw_entry['state'] = 'normal'
-        self.ventricular_amplitude_entry['state'] = 'disabled'
-        self.ventricular_pw_entry['state'] = 'disabled'
-        self.vrp_entry['state'] = 'disabled'
-        self.arp_entry['state'] = 'normal'
+        return parameters_for_mode
 
-    def _set_VVI_mode(self):
-        # disable the button
-        for mode, button in self.modes_dict.items():
-            if mode == 'vvi':
-                button['state'] = 'disabled'
-            else:
-                button['state'] = 'normal'
 
-        # enable all the currect entries
-        self.lower_rate_limit_entry['state'] = 'normal'
-        self.upper_rate_limit_entry['state'] = 'normal'
-        self.atrial_amplitude_entry['state'] = 'disabled'
-        self.atrial_pw_entry['state'] = 'disabled'
-        self.ventricular_amplitude_entry['state'] = 'normal'
-        self.ventricular_pw_entry['state'] = 'normal'
-        self.vrp_entry['state'] = 'normal'
-        self.arp_entry['state'] = 'disabled'
-    
     def _submit_parameters(self):
-        valid_parameters = self._validate_parameters(self.parameters_dict)
-        update_parameters(self.user.username, valid_parameters)
+        valid_parameters = self._find_parameters_for_mode(self.parameters_dict, self.mode)
+        valid, errors = self._validate_parameters(self.mode)
+        if (valid):
+            update_parameters(self.user.username, valid_parameters)
+        else:
+            print(errors)
 
-    def _validate_parameters(self):
+    def _validate_parameters(self, mode):
         valid = True
         errormessageset = {}
 
@@ -351,36 +308,43 @@ class GUI(object):
             errormessageset.add(errormessage)
 
         #aa
-        valid, errormessage = validate_regulated_atrial_amp
-        if(errormessage != ''):
-            errormessageset.add(errormessage)
+        if(mode == "aoo" or mode == "aai"):
+            valid, errormessage = validate_regulated_atrial_amp
+            if(errormessage != ''):
+                errormessageset.add(errormessage)
 
         #apw
-        valid, errormessage = validate_atrial_pw
-        if(errormessage != ''):
-            errormessageset.add(errormessage)
+        if(mode == "aoo" or mode == "aai"):
+            valid, errormessage = validate_atrial_pw
+            if(errormessage != ''):
+                errormessageset.add(errormessage)
 
         #va
-        valid, errormessage = validate_regulated_ventricular_amp
-        if(errormessage != ''):
-            errormessageset.add(errormessage)
+        if(mode == "voo" or mode == "vvi"):
+            valid, errormessage = validate_regulated_ventricular_amp
+            if(errormessage != ''):
+                errormessageset.add(errormessage)
 
         #vpw
-        valid, errormessage = validate_ventricular_pw
-        if(errormessage != ''):
-            errormessageset.add(errormessage)
+        if(mode == "voo" or mode == "vvi"):
+            valid, errormessage = validate_ventricular_pw
+            if(errormessage != ''):
+                errormessageset.add(errormessage)
 
         #vrp
-        valid, errormessage = validate_vrp
-        if(errormessage != ''):
-            errormessageset.add(errormessage)
+        if(mode == "vvi"):
+            valid, errormessage = validate_vrp
+            if(errormessage != ''):
+                errormessageset.add(errormessage)
 
         #arp
-        valid, errormessage = validate_arp
-        if(errormessage != ''):
-            errormessageset.add(errormessage)
+        if(mode == "aai"):
+            valid, errormessage = validate_arp
+            if(errormessage != ''):
+                errormessageset.add(errormessage)
+            
+        return valid, errormessageset
 
-        
                 
     def quit_win(self):
         # console message
