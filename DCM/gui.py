@@ -54,7 +54,8 @@ class GUI(object):
     
     def _on_submit_register(self, username: str, password: str):
         user_created = create_user(username, password)
-        if (get_number_of_users() >= 10):
+        device_id = 123 # change for assignment 2
+        if (get_number_of_users(device_id) >= 10):
             tk.Label(self.frame, width=50, text="Maximum number of users reached.", pady=60).grid(row=4,columnspan=2)
         elif(len(username)==0 or len(password)==0):
             tk.Label(self.frame, width=50, text="Username and password cannot be empty.", pady=60).grid(row=4,columnspan=2)
