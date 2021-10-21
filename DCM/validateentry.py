@@ -3,7 +3,11 @@ import tkinter as tk
 # NOTE: maybe change into an object in the future?
 
 def validate_lrl(lrl):
-    lrl = int(lrl)
+    try:
+        lrl = int(lrl)
+    except ValueError:
+        return False, "Error: Input must be number"
+
     if  30 <= lrl <= 50 :
         if (lrl % 5) == 0 :
             return True, ''
@@ -24,7 +28,11 @@ def validate_lrl(lrl):
 
 
 def validate_url(url):
-    url = int(url)
+    try:
+        url = int(url)
+    except ValueError:
+        return False, "Error: Input must be number"
+
     if 50 <= url <= 175 :
         if (url % 5) == 0 :
             return True, ''
@@ -36,8 +44,12 @@ def validate_url(url):
 
 def validate_regulated_atrial_amp(aa):
     #Multiplies by 10 and converts to int (Consider other methods)
-    aa_int = int(aa*10)
-
+    try:
+        aa = float(aa)
+        aa_int = int(aa*10)
+    except ValueError:
+        return False, "Error: Input must be number"
+    
     if (aa_int == 0):
         return True, ''
     elif 5 <= aa_int <= 32 :
@@ -55,8 +67,12 @@ def validate_regulated_atrial_amp(aa):
 
 def validate_atrial_pw(apw):
     #Multiplies by 100 and converts to int
-    apw_int = int(apw*100)
-
+    try:
+        apw = float(apw)
+        apw_int = int(apw*100)
+    except ValueError:
+        return False, "Error: Input must be number"
+    
     if (apw_int == 5):
         return True, ''
     elif 10 <= apw_int <= 190 :
@@ -70,7 +86,11 @@ def validate_atrial_pw(apw):
 
 def validate_regulated_ventricular_amp(va):
     #Multiplies by 10 and converts to int (Consider other methods)
-    va_int = int(va*10)
+    try:
+        va = float(va)
+        va_int = int(va*10)
+    except ValueError:
+        return False, "Error: Input must be number"
 
     if (va_int == 0):
         return True, ''
@@ -89,7 +109,11 @@ def validate_regulated_ventricular_amp(va):
 
 def validate_ventricular_pw(vpw):
     #Multiplies by 100 and converts to int
-    vpw_int = int(vpw*100)
+    try:
+        vpw = float(vpw)
+        vpw_int = int(vpw*100)
+    except ValueError:
+        return False, "Error: Input must be number"
 
     if (vpw_int == 5):
         return True, ''
@@ -102,7 +126,11 @@ def validate_ventricular_pw(vpw):
         return False, "Error: Must be in ranges: 0.05, 0.1-1.9 ms"
 
 def validate_vrp(vrp):
-    vrp = int(vrp)
+    try:
+        vrp = int(vrp)
+    except ValueError:
+        return False, "Error: Input must be number"
+
     if 150 <= vrp <= 500 :
         if (vrp % 10 ) == 0 :
             return True, ''
@@ -113,7 +141,11 @@ def validate_vrp(vrp):
 
 
 def validate_arp(arp):
-    arp = int(arp)
+    try:
+        arp = int(arp)
+    except ValueError:
+        return False, "Error: Input must be number"
+    
     if 150 <= arp <= 500 :
         if (arp % 10 ) == 0 :
             return True, ''

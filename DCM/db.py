@@ -31,8 +31,8 @@ def get_number_of_users(device_id: int):
     result = db.search(UserQuery.device_id == device_id)
     return len(result)
 
-def update_parameters(username: str, parameters: {str:str}):
+def update_parameters(username: str, parameters):
     user = get_user(username)
     for key in parameters:
-        user['parameters'][key] = parameters[key]
+        user['parameters'][key] = parameters[key].get()
     db.update({'parameters': user['parameters']}, UserQuery.username == username)

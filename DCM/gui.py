@@ -292,62 +292,65 @@ class GUI(object):
 
 
     def _submit_parameters(self):
+        if self.mode == '':
+            self._display_error_message('No operating mode has been selected')
+            return
         valid_parameters = self._find_parameters_for_mode(self.parameters_dict, self.mode)
         valid, errors = self._validate_parameters(self.mode)
         if (valid):
-            update_parameters(self.user.username, valid_parameters)
+            update_parameters(self.user['username'], valid_parameters)
         else:
-            print(errors)
+            self._display_error_message('%s\n and %s other errors.' % (errors[0], len(errors)))
 
     def _validate_parameters(self, mode):
         valid = True
-        errormessageset = {}
+        errormessageset = []
 
         #lrl
         valid, errormessage = validate_lrl(self.parameters_dict['lower_rate_limit'].get())
         if(errormessage != ''):
-            errormessageset.add(errormessage)
+            errormessageset.append(errormessage)
             
         #url
         valid, errormessage = validate_url(self.parameters_dict['upper_rate_limit'].get())
         if(errormessage != ''):
-            errormessageset.add(errormessage)
+            errormessageset.append(errormessage)
 
         #aa
         if(mode == "aoo" or mode == "aai"):
             valid, errormessage = validate_regulated_atrial_amp(self.parameters_dict['atrial_amplitude'].get())
             if(errormessage != ''):
-                errormessageset.add(errormessage)
+                errormessageset.append(errormessage)
 
         #apw
         if(mode == "aoo" or mode == "aai"):
             valid, errormessage = validate_atrial_pw(self.parameters_dict['atrial_pw'].get())
             if(errormessage != ''):
-                errormessageset.add(errormessage)
+                errormessageset.append(errormessage)
 
         #va
         if(mode == "voo" or mode == "vvi"):
             valid, errormessage = validate_regulated_ventricular_amp(self.parameters_dict['ventrical_amplitude'].get())
             if(errormessage != ''):
-                errormessageset.add(errormessage)
+                errormessageset.append(errormessage)
 
         #vpw
         if(mode == "voo" or mode == "vvi"):
             valid, errormessage = validate_ventricular_pw(self.parameters_dict['ventrical_pw'].get())
             if(errormessage != ''):
-                errormessageset.add(errormessage)
+                errormessageset.append(errormessage)
 
         #vrp
         if(mode == "vvi"):
             valid, errormessage = validate_vrp(self.parameters_dict['vrp'].get())
             if(errormessage != ''):
-                errormessageset.add(errormessage)
+                errormessageset.append(errormessage)
 
         #arp
         if(mode == "aai"):
             valid, errormessage = validate_arp(self.parameters_dict['arp'].get())
             if(errormessage != ''):
-                errormessageset.add(errormessage)
+                errormessageset.append(errormessage)
             
         return valid, errormessageset
 
