@@ -1,6 +1,6 @@
 import tkinter as tk
 from tkinter.constants import W
-from db import create_user, get_user, get_number_of_users, update_parameters
+from db import *
 from tkinter import messagebox
 from validateentry import *
 
@@ -262,7 +262,11 @@ class GUI(object):
         self._set_mode(self.user['operating_mode'])
 
         for parameter, entry in self.parameters_dict.items():
+            prev_state = entry['state']
+            entry['state'] = 'normal'
+            entry.delete(0, tk.END)
             entry.insert(0, self.user['parameters'][parameter])
+            entry['state'] = prev_state
 
     def _set_mode(self, input_mode):
         if input_mode == '':
@@ -300,6 +304,7 @@ class GUI(object):
         valid, errors = self._validate_parameters(self.mode)
         if (valid):
             update_parameters(self.user['username'], valid_parameters)
+            update_operating_mode(self.user['username'], self.mode)
         else:
             self._display_error_message('%s\n and %s other errors.' % (errors[0], len(errors)))
 
@@ -331,13 +336,13 @@ class GUI(object):
 
         #va
         if(mode == "voo" or mode == "vvi"):
-            valid, errormessage = validate_regulated_ventricular_amp(self.parameters_dict['ventrical_amplitude'].get())
+            valid, errormessage = validate_regulated_ventricular_amp(self.parameters_dict['ventricular_amplitude'].get())
             if(errormessage != ''):
                 errormessageset.append(errormessage)
 
         #vpw
         if(mode == "voo" or mode == "vvi"):
-            valid, errormessage = validate_ventricular_pw(self.parameters_dict['ventrical_pw'].get())
+            valid, errormessage = validate_ventricular_pw(self.parameters_dict['ventricular_pw'].get())
             if(errormessage != ''):
                 errormessageset.append(errormessage)
 
