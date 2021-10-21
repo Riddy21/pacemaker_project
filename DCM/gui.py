@@ -1,7 +1,27 @@
 import tkinter as tk
 from tkinter.constants import W
-from db import create_user, get_user, get_number_of_users
+from db import create_user, get_user, get_number_of_users, update_parameters
 from tkinter import messagebox
+from validateentry import *
+
+AOO_PARAMETERS = ['lower_rate_limit_entry',
+                  'upper_rate_limit_entry',
+                  'atrial_amplitude_entry',
+                  'atrial_pw_entry']
+VOO_PARAMETERS = ['lower_rate_limit_entry',
+                  'upper_rate_limit_entry',
+                  'ventricular_amplitude_entry',
+                  'ventricular_pw_entry']
+AAI_PARAMETERS = ['lower_rate_limit_entry',
+                  'upper_rate_limit_entry',
+                  'atrial_amplitude_entry',
+                  'atrial_pw_entry',
+                  'arp_entry']
+VVI_PARAMETERS = ['lower_rate_limit_entry',
+                  'upper_rate_limit_entry',
+                  'ventricular_amplitude_entry',
+                  'ventricular_pw_entry',
+                  'vrp_entry']
 
 class GUI(object):
     def __init__(self):
@@ -29,25 +49,21 @@ class GUI(object):
         # Update loop
         self.update()
 
-        # declare needed buttons and entries as emtpy string
-        self.aoo = None
-        self.voo = None
-        self.aai = None
-        self.vvi = None
-        self.lower_rate_limit_entry = None
-        self.upper_rate_limit_entry = None #all
-        self.atrial_amplitude_entry = None #AOO, AAI
-        self.atrial_pw_entry = None #AAO, AAI
-        self.ventricular_amplitude_entry = None #VOO, VVI
-        self.ventricular_pw_entry = None #VOO, VVI
-        self.vrp_entry = None #VVI
-        self.arp_entry = None #AAI
+        # Default user
+        self.user = None
+        
+        #Mode arbitrarily selecting default
+        self.mode = ""
+
+        # declare needed buttons and entries
+        self.modes_dict = dict()
+        self.parameters_dict = dict()
 
     def _on_submit_login(self, username: str, password: str):
-        user = get_user(username)
-        if user is None:
+        self.user = get_user(username)
+        if self.user is None:
             tk.Label(self.frame, width=50, text="User not found.", pady=60).grid(row=4,columnspan=2)
-        elif user['password'] == password:
+        elif self.user['password'] == password:
             self._create_dcm_screen()
         else:
             tk.Label(self.frame, width=50, text="Incorrect password.", pady=60).grid(row=4,columnspan=2)
@@ -102,7 +118,7 @@ class GUI(object):
         username = tk.Label(self.frame, text='Username',pady=10)
         password = tk.Label(self.frame, text='Password',pady=10)
         usernameEntry = tk.Entry(self.frame)
-        passwordEntry = tk.Entry(self.frame)
+        passwordEntry = tk.Entry(self.frame, show='•')
         # redirect to verification
         loginButton = tk.Button(self.frame, text='Login', pady=5, width=15, command=lambda: self._on_submit_login(usernameEntry.get(),passwordEntry.get()))
         backButton = tk.Button(self.frame, text='Back', pady=5, width=15, command=lambda: self._create_welcome_screen())
@@ -130,7 +146,7 @@ class GUI(object):
         username = tk.Label(self.frame, text='Username', pady=10)
         password = tk.Label(self.frame, text='Password', pady=10)
         usernameEntry = tk.Entry(self.frame)
-        passwordEntry = tk.Entry(self.frame)
+        passwordEntry = tk.Entry(self.frame, show='•')
         # redirect to verification
         submitButton = tk.Button(self.frame, text='Submit', pady=5, width=15, command=lambda:self._on_submit_register(usernameEntry.get(),passwordEntry.get()))
         backButton = tk.Button(self.frame, text='Back', pady=5, width=15, command=lambda: self._create_welcome_screen())
@@ -163,34 +179,37 @@ class GUI(object):
         atrial_pw = tk.Label(self.frame, text='Atrial PW', pady=10)#AAO, AAI
         ventricular_amplitude = tk.Label(self.frame, text='Ventricular Amplitude', pady=10)#VOO, VVI
         ventricular_pw = tk.Label(self.frame, text='Ventyricular PW', pady=10)#VOO, VVI
-        vrp = tk.Label(self.frame, text='CRP', pady=10)#VVI
+        vrp = tk.Label(self.frame, text='VRP', pady=10)#VVI
         arp = tk.Label(self.frame, text='ARP', pady=10)#AAI
 
-        self.lower_rate_limit_entry = tk.Entry(self.frame) #all
-        self.upper_rate_limit_entry = tk.Entry(self.frame) #all
-        self.atrial_amplitude_entry = tk.Entry(self.frame) #AOO, AAI
-        self.atrial_pw_entry = tk.Entry(self.frame) #AAO, AAI
-        self.ventricular_amplitude_entry = tk.Entry(self.frame) #VOO, VVI
-        self.ventricular_pw_entry = tk.Entry(self.frame) #VOO, VVI
-        self.vrp_entry = tk.Entry(self.frame) #VVI
-        self.arp_entry = tk.Entry(self.frame) #AAI
+        self.parameters_dict['lower_rate_limit_entry'] = tk.Entry(self.frame) #all
+        self.parameters_dict['upper_rate_limit_entry'] = tk.Entry(self.frame) #all
+        self.parameters_dict['atrial_amplitude_entry'] = tk.Entry(self.frame) #AOO, AAI
+        self.parameters_dict['atrial_pw_entry'] = tk.Entry(self.frame) #AAO, AAI
+        self.parameters_dict['ventricular_amplitude_entry'] = tk.Entry(self.frame) #VOO, VVI
+        self.parameters_dict['ventricular_pw_entry'] = tk.Entry(self.frame) #VOO, VVI
+        self.parameters_dict['vrp_entry'] = tk.Entry(self.frame) #VVI
+        self.parameters_dict['arp_entry'] = tk.Entry(self.frame) #AAI
 
         # Operating modes
         modes_label = tk.Label(self.frame, text='Operating Modes', pady=15)
-        self.aoo = tk.Button(self.frame, text='AOO', width=10, height=5, command=lambda: self._set_AOO_mode())
-        self.voo = tk.Button(self.frame, text='VOO', width=10, height=5, command=lambda: self._set_VOO_mode())
-        self.aai = tk.Button(self.frame, text='AAI', width=10, height=5, command=lambda: self._set_AAI_mode())
-        self.vvi = tk.Button(self.frame, text='VVI', width=10, height=5, command=lambda: self._set_VVI_mode())
+        self.modes_dict['aoo'] = tk.Button(self.frame, text='AOO', width=10, height=5, command=lambda: self._set_mode('aoo', AOO_PARAMETERS))
+        self.modes_dict['voo'] = tk.Button(self.frame, text='VOO', width=10, height=5, command=lambda: self._set_mode('voo', VOO_PARAMETERS))
+        self.modes_dict['aai'] = tk.Button(self.frame, text='AAI', width=10, height=5, command=lambda: self._set_mode('AAI', AAI_PARAMETERS))
+        self.modes_dict['vvi'] = tk.Button(self.frame, text='VVI', width=10, height=5, command=lambda: self._set_mode('VVI', VVI_PARAMETERS))
         
         # Status
         status_label = tk.Label(self.frame, text='Status', pady=15)
         device_connection = tk.Label(self.frame, fg='red', text='Device disconnected')
         device_information = tk.Label(self.frame, fg='red', text='No device data available')
 
+        submit_button = tk.Button(self.frame, text='Submit', width=10, height=5, command=lambda: self._submit_parameters())
+
         logout_button = tk.Button(self.frame, text='Logout', command=lambda: self._create_welcome_screen())
         close_button = tk.Button(self.frame, text='Close', command=lambda: self.quit_win())
-        
-        # TODO: Create Submit button and functionality
+
+        # Load in user defaults
+        self._load_user_defaults()
 
         # Title locations
         parameter_label.grid(row=0, column=1, columnspan=2)
@@ -207,39 +226,49 @@ class GUI(object):
         vrp.grid(row=7, column=1)
         arp.grid(row=8, column=1)
 
-        self.lower_rate_limit_entry.grid(row=1, column=2)
-        self.upper_rate_limit_entry.grid(row=2, column=2)
-        self.atrial_amplitude_entry.grid(row=3, column=2)
-        self.atrial_pw_entry.grid(row=4, column=2)
-        self.ventricular_amplitude_entry.grid(row=5, column=2)
-        self.ventricular_pw_entry.grid(row=6, column=2)
-        self.vrp_entry.grid(row=7, column=2)
-        self.arp_entry.grid(row=8, column=2)
+        self.parameters_dict['lower_rate_limit_entry'].grid(row=1, column=2)
+        self.parameters_dict['upper_rate_limit_entry'].grid(row=2, column=2)
+        self.parameters_dict['atrial_amplitude_entry'].grid(row=3, column=2)
+        self.parameters_dict['atrial_pw_entry'].grid(row=4, column=2)
+        self.parameters_dict['ventricular_amplitude_entry'].grid(row=5, column=2)
+        self.parameters_dict['ventricular_pw_entry'].grid(row=6, column=2)
+        self.parameters_dict['vrp_entry'].grid(row=7, column=2)
+        self.parameters_dict['arp_entry'].grid(row=8, column=2)
 
         # Operating mode buttons
-        self.aoo.grid(row=1, column=0, rowspan=2)
-        self.voo.grid(row=3, column=0, rowspan=2)
-        self.aai.grid(row=5, column=0, rowspan=2)
-        self.vvi.grid(row=7, column=0, rowspan=2)
+        self.modes_dict['aoo'].grid(row=1, column=0, rowspan=2)
+        self.modes_dict['voo'].grid(row=3, column=0, rowspan=2)
+        self.modes_dict['aai'].grid(row=5, column=0, rowspan=2)
+        self.modes_dict['vvi'].grid(row=7, column=0, rowspan=2)
 
         # Status
         device_connection.grid(row=1, column=3, columnspan=2)
         device_information.grid(row=3, column=3, columnspan=2)
 
+        # Submit button
+        submit_button.grid(row=7, column=3, rowspan=2, columnspan=2)
+
         # exit buttons
-        logout_button.grid(row=9, column=0, columnspan=2)
-        close_button.grid(row=9, column=2, columnspan=2)
+        logout_button.grid(row=10, column=1)
+        close_button.grid(row=10, column=3)
 
         self.frame.pack()
 
         self.state = "DCM"
+        
+    def _load_user_defaults(self):
+        # get the right state
+        #self.user['operating_mode']
+        pass
+
     
     def _set_AOO_mode(self):
         # disable the button
-        self.aoo['state'] = 'disabled'
-        self.voo['state'] = 'normal'
-        self.aai['state'] = 'normal'
-        self.vvi['state'] = 'normal'
+        for mode, button in self.modes_dict.items():
+            if mode == 'aoo':
+                button['state'] = 'disabled'
+            else:
+                button['state'] = 'normal'
 
         # enable all the currect entries
         self.lower_rate_limit_entry['state'] = 'normal'
@@ -251,29 +280,29 @@ class GUI(object):
         self.vrp_entry['state'] = 'disabled'
         self.arp_entry['state'] = 'disabled'
 
-    def _set_VOO_mode(self):
+
+    def _set_mode(self, input_mode, valid_parameters):
         # disable the button
-        self.aoo['state'] = 'normal'
-        self.voo['state'] = 'disabled'
-        self.aai['state'] = 'normal'
-        self.vvi['state'] = 'normal'
+        for mode, button in self.modes_dict.items():
+            if mode == input_mode:
+                button['state'] = 'disabled'
+            else:
+                button['state'] = 'normal'
 
         # enable all the currect entries
-        self.lower_rate_limit_entry['state'] = 'normal'
-        self.upper_rate_limit_entry['state'] = 'normal'
-        self.atrial_amplitude_entry['state'] = 'disabled'
-        self.atrial_pw_entry['state'] = 'disabled'
-        self.ventricular_amplitude_entry['state'] = 'normal'
-        self.ventricular_pw_entry['state'] = 'normal'
-        self.vrp_entry['state'] = 'disabled'
-        self.arp_entry['state'] = 'disabled'
+        for parameter, entry in self.parameters_dict.items():
+            if parameter in valid_parameters:
+                entry['state'] = 'normal'
+            else:
+                entry['state'] = 'disabled'
 
     def _set_AAI_mode(self):
         # disable the button
-        self.aoo['state'] = 'normal'
-        self.voo['state'] = 'normal'
-        self.aai['state'] = 'disabled'
-        self.vvi['state'] = 'normal'
+        for mode, button in self.modes_dict.items():
+            if mode == 'aai':
+                button['state'] = 'disabled'
+            else:
+                button['state'] = 'normal'
 
         # enable all the currect entries
         self.lower_rate_limit_entry['state'] = 'normal'
@@ -287,10 +316,11 @@ class GUI(object):
 
     def _set_VVI_mode(self):
         # disable the button
-        self.aoo['state'] = 'normal'
-        self.voo['state'] = 'normal'
-        self.aai['state'] = 'normal'
-        self.vvi['state'] = 'disabled'
+        for mode, button in self.modes_dict.items():
+            if mode == 'vvi':
+                button['state'] = 'disabled'
+            else:
+                button['state'] = 'normal'
 
         # enable all the currect entries
         self.lower_rate_limit_entry['state'] = 'normal'
@@ -303,8 +333,55 @@ class GUI(object):
         self.arp_entry['state'] = 'disabled'
     
     def _submit_parameters(self):
-        pass
+        valid_parameters = self._validate_parameters(self.parameters_dict)
+        update_parameters(self.user.username, valid_parameters)
 
+    def _validate_parameters(self):
+        valid = True
+        errormessageset = {}
+
+        #lrl
+        valid, errormessage = validate_lrl
+        if(errormessage != ''):
+            errormessageset.add(errormessage)
+            
+        #url
+        valid, errormessage = validate_url
+        if(errormessage != ''):
+            errormessageset.add(errormessage)
+
+        #aa
+        valid, errormessage = validate_regulated_atrial_amp
+        if(errormessage != ''):
+            errormessageset.add(errormessage)
+
+        #apw
+        valid, errormessage = validate_atrial_pw
+        if(errormessage != ''):
+            errormessageset.add(errormessage)
+
+        #va
+        valid, errormessage = validate_regulated_ventricular_amp
+        if(errormessage != ''):
+            errormessageset.add(errormessage)
+
+        #vpw
+        valid, errormessage = validate_ventricular_pw
+        if(errormessage != ''):
+            errormessageset.add(errormessage)
+
+        #vrp
+        valid, errormessage = validate_vrp
+        if(errormessage != ''):
+            errormessageset.add(errormessage)
+
+        #arp
+        valid, errormessage = validate_arp
+        if(errormessage != ''):
+            errormessageset.add(errormessage)
+
+        
+                
     def quit_win(self):
         # console message
         print("Quitting DCM")
