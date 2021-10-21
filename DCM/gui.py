@@ -305,6 +305,7 @@ class GUI(object):
         if (valid):
             update_parameters(self.user['username'], valid_parameters)
             update_operating_mode(self.user['username'], self.mode)
+            messagebox.showerror("Success", 'Parameters saved and submitted') 
         else:
             self._display_error_message('%s\n and %s other errors.' % (errors[0], len(errors)))
 
