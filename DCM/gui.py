@@ -258,9 +258,15 @@ class GUI(object):
         
     def _load_user_defaults(self):
         # get the right state
-        pass
+        self._set_mode(self.user['device_id'])
+
+        for parameter, entry in self.parameters_dict.items():
+            entry.insert(0, self.user['parameters'][parameter])
 
     def _set_mode(self, input_mode):
+        if input_mode == '':
+            return
+
         # disable the button
         for mode, button in self.modes_dict.items():
             if mode == input_mode:
@@ -272,7 +278,6 @@ class GUI(object):
         # enable all the currect entries
         for parameter, entry in self.parameters_dict.items():
             if parameter in VALID_PARAMETERS[input_mode]:
-                print(parameter, entry)
                 entry['state'] = 'normal'
             else:
                 entry['state'] = 'disabled'
@@ -299,48 +304,48 @@ class GUI(object):
         errormessageset = {}
 
         #lrl
-        valid, errormessage = validate_lrl()
+        valid, errormessage = validate_lrl(self.parameters_dict['lower_rate_limit_entry'])
         if(errormessage != ''):
             errormessageset.add(errormessage)
             
         #url
-        valid, errormessage = validate_url
+        valid, errormessage = validate_url(self.parameters_dict['upper_rate_limit_entry'])
         if(errormessage != ''):
             errormessageset.add(errormessage)
 
         #aa
         if(mode == "aoo" or mode == "aai"):
-            valid, errormessage = validate_regulated_atrial_amp
+            valid, errormessage = validate_regulated_atrial_amp(self.parameters_dict['atrial_amplitude_entry'])
             if(errormessage != ''):
                 errormessageset.add(errormessage)
 
         #apw
         if(mode == "aoo" or mode == "aai"):
-            valid, errormessage = validate_atrial_pw
+            valid, errormessage = validate_atrial_pw(self.parameters_dict['atrial_pw_entry'])
             if(errormessage != ''):
                 errormessageset.add(errormessage)
 
         #va
         if(mode == "voo" or mode == "vvi"):
-            valid, errormessage = validate_regulated_ventricular_amp
+            valid, errormessage = validate_regulated_ventricular_amp(self.parameters_dict['ventrical_amplitude_entry'])
             if(errormessage != ''):
                 errormessageset.add(errormessage)
 
         #vpw
         if(mode == "voo" or mode == "vvi"):
-            valid, errormessage = validate_ventricular_pw
+            valid, errormessage = validate_ventricular_pw(self.parameters_dict['ventrical_pw_entry'])
             if(errormessage != ''):
                 errormessageset.add(errormessage)
 
         #vrp
         if(mode == "vvi"):
-            valid, errormessage = validate_vrp
+            valid, errormessage = validate_vrp(self.parameters_dict['vrp_entry'])
             if(errormessage != ''):
                 errormessageset.add(errormessage)
 
         #arp
         if(mode == "aai"):
-            valid, errormessage = validate_arp
+            valid, errormessage = validate_arp(self.parameters_dict['arp_entry'])
             if(errormessage != ''):
                 errormessageset.add(errormessage)
             
