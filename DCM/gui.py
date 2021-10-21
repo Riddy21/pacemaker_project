@@ -265,13 +265,14 @@ class GUI(object):
         for mode, button in self.modes_dict.items():
             if mode == input_mode:
                 button['state'] = 'disabled'
-                self.mode = mode
+                self.mode = input_mode
             else:
                 button['state'] = 'normal'
 
         # enable all the currect entries
         for parameter, entry in self.parameters_dict.items():
-            if parameter in VALID_PARAMETERS[mode]:
+            if parameter in VALID_PARAMETERS[input_mode]:
+                print(parameter, entry)
                 entry['state'] = 'normal'
             else:
                 entry['state'] = 'disabled'
@@ -298,7 +299,7 @@ class GUI(object):
         errormessageset = {}
 
         #lrl
-        valid, errormessage = validate_lrl
+        valid, errormessage = validate_lrl()
         if(errormessage != ''):
             errormessageset.add(errormessage)
             
