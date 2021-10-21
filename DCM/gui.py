@@ -4,24 +4,24 @@ from db import create_user, get_user, get_number_of_users, update_parameters
 from tkinter import messagebox
 from validateentry import *
 
-VALID_PARAMETERS = {'aoo': ['lower_rate_limit_entry',
-                            'upper_rate_limit_entry',
-                            'atrial_amplitude_entry',
-                            'atrial_pw_entry'],
-                    'voo': ['lower_rate_limit_entry',
-                            'upper_rate_limit_entry',
-                            'ventricular_amplitude_entry', 
-                            'ventricular_pw_entry'],
-                    'aai': ['lower_rate_limit_entry', 
-                            'upper_rate_limit_entry', 
-                            'atrial_amplitude_entry', 
-                            'atrial_pw_entry', 
-                            'arp_entry'],
-                    'vvi': ['lower_rate_limit_entry', 
-                            'upper_rate_limit_entry', 
-                            'ventricular_amplitude_entry', 
-                            'ventricular_pw_entry',
-                            'vrp_entry']}
+VALID_PARAMETERS = {'aoo': ['lower_rate_limit',
+                            'upper_rate_limit',
+                            'atrial_amplitude',
+                            'atrial_pw'],
+                    'voo': ['lower_rate_limit',
+                            'upper_rate_limit',
+                            'ventricular_amplitude', 
+                            'ventricular_pw'],
+                    'aai': ['lower_rate_limit', 
+                            'upper_rate_limit', 
+                            'atrial_amplitude', 
+                            'atrial_pw', 
+                            'arp'],
+                    'vvi': ['lower_rate_limit', 
+                            'upper_rate_limit', 
+                            'ventricular_amplitude', 
+                            'ventricular_pw',
+                            'vrp']}
 
 class GUI(object):
     def __init__(self):
@@ -182,14 +182,14 @@ class GUI(object):
         vrp = tk.Label(self.frame, text='VRP', pady=10)#VVI
         arp = tk.Label(self.frame, text='ARP', pady=10)#AAI
 
-        self.parameters_dict['lower_rate_limit_entry'] = tk.Entry(self.frame) #all
-        self.parameters_dict['upper_rate_limit_entry'] = tk.Entry(self.frame) #all
-        self.parameters_dict['atrial_amplitude_entry'] = tk.Entry(self.frame) #AOO, AAI
-        self.parameters_dict['atrial_pw_entry'] = tk.Entry(self.frame) #AAO, AAI
-        self.parameters_dict['ventricular_amplitude_entry'] = tk.Entry(self.frame) #VOO, VVI
-        self.parameters_dict['ventricular_pw_entry'] = tk.Entry(self.frame) #VOO, VVI
-        self.parameters_dict['vrp_entry'] = tk.Entry(self.frame) #VVI
-        self.parameters_dict['arp_entry'] = tk.Entry(self.frame) #AAI
+        self.parameters_dict['lower_rate_limit'] = tk.Entry(self.frame) #all
+        self.parameters_dict['upper_rate_limit'] = tk.Entry(self.frame) #all
+        self.parameters_dict['atrial_amplitude'] = tk.Entry(self.frame) #AOO, AAI
+        self.parameters_dict['atrial_pw'] = tk.Entry(self.frame) #AAO, AAI
+        self.parameters_dict['ventricular_amplitude'] = tk.Entry(self.frame) #VOO, VVI
+        self.parameters_dict['ventricular_pw'] = tk.Entry(self.frame) #VOO, VVI
+        self.parameters_dict['vrp'] = tk.Entry(self.frame) #VVI
+        self.parameters_dict['arp'] = tk.Entry(self.frame) #AAI
 
         # Operating modes
         modes_label = tk.Label(self.frame, text='Operating Modes', pady=15)
@@ -226,14 +226,14 @@ class GUI(object):
         vrp.grid(row=7, column=1)
         arp.grid(row=8, column=1)
 
-        self.parameters_dict['lower_rate_limit_entry'].grid(row=1, column=2)
-        self.parameters_dict['upper_rate_limit_entry'].grid(row=2, column=2)
-        self.parameters_dict['atrial_amplitude_entry'].grid(row=3, column=2)
-        self.parameters_dict['atrial_pw_entry'].grid(row=4, column=2)
-        self.parameters_dict['ventricular_amplitude_entry'].grid(row=5, column=2)
-        self.parameters_dict['ventricular_pw_entry'].grid(row=6, column=2)
-        self.parameters_dict['vrp_entry'].grid(row=7, column=2)
-        self.parameters_dict['arp_entry'].grid(row=8, column=2)
+        self.parameters_dict['lower_rate_limit'].grid(row=1, column=2)
+        self.parameters_dict['upper_rate_limit'].grid(row=2, column=2)
+        self.parameters_dict['atrial_amplitude'].grid(row=3, column=2)
+        self.parameters_dict['atrial_pw'].grid(row=4, column=2)
+        self.parameters_dict['ventricular_amplitude'].grid(row=5, column=2)
+        self.parameters_dict['ventricular_pw'].grid(row=6, column=2)
+        self.parameters_dict['vrp'].grid(row=7, column=2)
+        self.parameters_dict['arp'].grid(row=8, column=2)
 
         # Operating mode buttons
         self.modes_dict['aoo'].grid(row=1, column=0, rowspan=2)
@@ -258,7 +258,7 @@ class GUI(object):
         
     def _load_user_defaults(self):
         # get the right state
-        self._set_mode(self.user['device_id'])
+        self._set_mode(self.user['operating_mode'])
 
         for parameter, entry in self.parameters_dict.items():
             entry.insert(0, self.user['parameters'][parameter])
@@ -304,48 +304,48 @@ class GUI(object):
         errormessageset = {}
 
         #lrl
-        valid, errormessage = validate_lrl(self.parameters_dict['lower_rate_limit_entry'])
+        valid, errormessage = validate_lrl(self.parameters_dict['lower_rate_limit'].get())
         if(errormessage != ''):
             errormessageset.add(errormessage)
             
         #url
-        valid, errormessage = validate_url(self.parameters_dict['upper_rate_limit_entry'])
+        valid, errormessage = validate_url(self.parameters_dict['upper_rate_limit'].get())
         if(errormessage != ''):
             errormessageset.add(errormessage)
 
         #aa
         if(mode == "aoo" or mode == "aai"):
-            valid, errormessage = validate_regulated_atrial_amp(self.parameters_dict['atrial_amplitude_entry'])
+            valid, errormessage = validate_regulated_atrial_amp(self.parameters_dict['atrial_amplitude'].get())
             if(errormessage != ''):
                 errormessageset.add(errormessage)
 
         #apw
         if(mode == "aoo" or mode == "aai"):
-            valid, errormessage = validate_atrial_pw(self.parameters_dict['atrial_pw_entry'])
+            valid, errormessage = validate_atrial_pw(self.parameters_dict['atrial_pw'].get())
             if(errormessage != ''):
                 errormessageset.add(errormessage)
 
         #va
         if(mode == "voo" or mode == "vvi"):
-            valid, errormessage = validate_regulated_ventricular_amp(self.parameters_dict['ventrical_amplitude_entry'])
+            valid, errormessage = validate_regulated_ventricular_amp(self.parameters_dict['ventrical_amplitude'].get())
             if(errormessage != ''):
                 errormessageset.add(errormessage)
 
         #vpw
         if(mode == "voo" or mode == "vvi"):
-            valid, errormessage = validate_ventricular_pw(self.parameters_dict['ventrical_pw_entry'])
+            valid, errormessage = validate_ventricular_pw(self.parameters_dict['ventrical_pw'].get())
             if(errormessage != ''):
                 errormessageset.add(errormessage)
 
         #vrp
         if(mode == "vvi"):
-            valid, errormessage = validate_vrp(self.parameters_dict['vrp_entry'])
+            valid, errormessage = validate_vrp(self.parameters_dict['vrp'].get())
             if(errormessage != ''):
                 errormessageset.add(errormessage)
 
         #arp
         if(mode == "aai"):
-            valid, errormessage = validate_arp(self.parameters_dict['arp_entry'])
+            valid, errormessage = validate_arp(self.parameters_dict['arp'].get())
             if(errormessage != ''):
                 errormessageset.add(errormessage)
             

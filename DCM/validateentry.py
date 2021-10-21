@@ -3,6 +3,7 @@ import tkinter as tk
 # NOTE: maybe change into an object in the future?
 
 def validate_lrl(lrl):
+    lrl = int(lrl)
     if  30 <= lrl <= 50 :
         if (lrl % 5) == 0 :
             return True, ''
@@ -23,6 +24,7 @@ def validate_lrl(lrl):
 
 
 def validate_url(url):
+    url = int(url)
     if 50 <= url <= 175 :
         if (url % 5) == 0 :
             return True, ''
@@ -100,6 +102,7 @@ def validate_ventricular_pw(vpw):
         return False, "Error: Must be in ranges: 0.05, 0.1-1.9 ms"
 
 def validate_vrp(vrp):
+    vrp = int(vrp)
     if 150 <= vrp <= 500 :
         if (vrp % 10 ) == 0 :
             return True, ''
@@ -110,6 +113,7 @@ def validate_vrp(vrp):
 
 
 def validate_arp(arp):
+    arp = int(arp)
     if 150 <= arp <= 500 :
         if (arp % 10 ) == 0 :
             return True, ''
