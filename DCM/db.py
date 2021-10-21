@@ -36,3 +36,6 @@ def update_parameters(username: str, parameters):
     for key in parameters:
         user['parameters'][key] = parameters[key].get()
     db.update({'parameters': user['parameters']}, UserQuery.username == username)
+
+def update_operating_mode(username: str, mode: str):
+    db.update({'operating_mode': mode}, UserQuery.username == username)
