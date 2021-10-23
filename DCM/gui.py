@@ -72,14 +72,14 @@ class GUI(object):
         user_created = create_user(username, password)
         device_id = 123 # change for assignment 2
         if (get_number_of_users(device_id) >= 10):
-            tk.Label(self.frame, width=50, text="Maximum number of users reached.", pady=60).grid(row=4,columnspan=2)
+            tk.Label(self.frame, width=50, text="Maximum number of users reached.", fg='red', pady=60).grid(row=4,columnspan=2)
         elif(len(username)==0 or len(password)==0):
-            tk.Label(self.frame, width=50, text="Username and password cannot be empty.", pady=60).grid(row=4,columnspan=2)
+            tk.Label(self.frame, width=50, text="Username and password cannot be empty.", fg='red', pady=60).grid(row=4,columnspan=2)
         elif user_created:
             self.user = get_user(username)
             self._create_dcm_screen()
         else:
-            tk.Label(self.frame, width=50, text="User with that username already exists.", pady=60).grid(row=4,columnspan=2)
+            tk.Label(self.frame, width=50, text="User with that username already exists.", fg='red', pady=60).grid(row=4,columnspan=2)
 
     def _display_error_message(self, msg):
         messagebox.showerror("Error", msg)
