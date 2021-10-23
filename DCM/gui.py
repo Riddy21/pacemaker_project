@@ -289,6 +289,9 @@ class GUI(object):
 
     def _find_parameters_for_mode(self, parameters_dict, mode):
         parameters_for_mode = dict()
+        if mode not in VALID_PARAMETERS.keys():
+            print("ERROR: Internal error, invalid mode given to _find_parameters_for_mode.")
+            return False
         for parameter, entry in parameters_dict.items():
             if parameter in VALID_PARAMETERS[mode]:
                 parameters_for_mode[parameter] = entry
