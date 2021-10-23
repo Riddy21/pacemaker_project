@@ -316,6 +316,10 @@ class GUI(object):
         valid = True
         errormessageset = []
 
+        if mode not in VALID_PARAMETERS.keys():
+            print("ERROR: Internal error, invalid mode given to _validate_parameters")
+            return False
+
         #lrl
         valid, errormessage = validate_lrl(self.parameters_dict['lower_rate_limit'].get())
         if(errormessage != ''):
