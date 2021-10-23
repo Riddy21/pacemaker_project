@@ -311,7 +311,7 @@ class GUI(object):
             messagebox.showerror("Error", msg)
 
     def _validate_parameters(self, mode):
-        valid = True
+        all_valid = True
         errormessageset = []
 
         if mode not in VALID_PARAMETERS.keys():
@@ -322,49 +322,59 @@ class GUI(object):
         valid, errormessage = validate_lrl(self.parameters_dict['lower_rate_limit'].get())
         if(errormessage != ''):
             errormessageset.append(errormessage)
-            
+        all_valid = all_valid and valid
+
+
         #url
         valid, errormessage = validate_url(self.parameters_dict['upper_rate_limit'].get())
         if(errormessage != ''):
             errormessageset.append(errormessage)
+        all_valid = all_valid and valid
+
 
         #aa
         if(mode == "aoo" or mode == "aai"):
             valid, errormessage = validate_regulated_atrial_amp(self.parameters_dict['atrial_amplitude'].get())
             if(errormessage != ''):
                 errormessageset.append(errormessage)
+        all_valid = all_valid and valid
 
         #apw
         if(mode == "aoo" or mode == "aai"):
             valid, errormessage = validate_atrial_pw(self.parameters_dict['atrial_pw'].get())
             if(errormessage != ''):
                 errormessageset.append(errormessage)
+        all_valid = all_valid and valid
 
         #va
         if(mode == "voo" or mode == "vvi"):
             valid, errormessage = validate_regulated_ventricular_amp(self.parameters_dict['ventricular_amplitude'].get())
             if(errormessage != ''):
                 errormessageset.append(errormessage)
+        all_valid = all_valid and valid
 
         #vpw
         if(mode == "voo" or mode == "vvi"):
             valid, errormessage = validate_ventricular_pw(self.parameters_dict['ventricular_pw'].get())
             if(errormessage != ''):
                 errormessageset.append(errormessage)
+        all_valid = all_valid and valid
 
         #vrp
         if(mode == "vvi"):
             valid, errormessage = validate_vrp(self.parameters_dict['vrp'].get())
             if(errormessage != ''):
                 errormessageset.append(errormessage)
+        all_valid = all_valid and valid
 
         #arp
         if(mode == "aai"):
             valid, errormessage = validate_arp(self.parameters_dict['arp'].get())
             if(errormessage != ''):
                 errormessageset.append(errormessage)
-            
-        return valid, errormessageset
+        all_valid = all_valid and valid
+           
+        return all_valid, errormessageset
 
                 
     def quit_win(self):
