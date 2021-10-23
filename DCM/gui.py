@@ -81,9 +81,6 @@ class GUI(object):
         else:
             tk.Label(self.frame, width=50, text="User with that username already exists.", fg='red', pady=60).grid(row=4,columnspan=2)
 
-    def _display_error_message(self, msg):
-        messagebox.showerror("Error", msg)
-    
     # Creates menu GUI
     def _create_welcome_screen(self):
         # Delete previous frame
@@ -300,8 +297,9 @@ class GUI(object):
 
 
     def _submit_parameters(self):
+        print(self.mode)
         if self.mode == '':
-            self._display_error_message('No operating mode has been selected')
+            messagebox.showerror("Error", 'No operating mode has been selected')
             return
         valid_parameters = self._find_parameters_for_mode(self.parameters_dict, self.mode)
         valid, errors = self._validate_parameters(self.mode)
@@ -310,7 +308,8 @@ class GUI(object):
             update_operating_mode(self.user['username'], self.mode)
             messagebox.showerror("Success", 'Parameters saved and submitted') 
         else:
-            self._display_error_message('%s\n and %s other errors.' % (errors[0], len(errors)))
+            msg = '%s\n and %s other errors.' % (errors[0], len(errors))
+            messagebox.showerror("Error", msg)
 
     def _validate_parameters(self, mode):
         valid = True
