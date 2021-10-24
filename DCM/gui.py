@@ -174,9 +174,9 @@ class GUI(object):
         lower_rate_limit = tk.Label(self.frame, text='Lower rate limit', pady=10) #all
         upper_rate_limit = tk.Label(self.frame, text='Upper rate limit', pady=10)#all
         atrial_amplitude = tk.Label(self.frame, text='Atrial amplitude', pady=10)#AOO, AAI
-        atrial_pw = tk.Label(self.frame, text='Atrial PW', pady=10)#AAO, AAI
+        atrial_pw = tk.Label(self.frame, text='Atrial pulse width', pady=10)#AAO, AAI
         ventricular_amplitude = tk.Label(self.frame, text='Ventricular Amplitude', pady=10)#VOO, VVI
-        ventricular_pw = tk.Label(self.frame, text='Ventyricular PW', pady=10)#VOO, VVI
+        ventricular_pw = tk.Label(self.frame, text='Ventricular pulse width', pady=10)#VOO, VVI
         vrp = tk.Label(self.frame, text='VRP', pady=10)#VVI
         arp = tk.Label(self.frame, text='ARP', pady=10)#AAI
 
