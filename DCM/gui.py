@@ -298,16 +298,16 @@ class GUI(object):
 
     def _submit_parameters(self):
         if self.mode == '':
-            messagebox.showerror("Error", 'Error: No operating mode has been selected')
+            messagebox.showerror("Error", 'No operating mode has been selected')
             return
         valid_parameters = self._find_parameters_for_mode(self.parameters_dict, self.mode)
         valid, errors = self._validate_parameters(self.mode)
         if (valid):
             update_parameters(self.user['username'], valid_parameters)
             update_operating_mode(self.user['username'], self.mode)
-            messagebox.showerror("Success", 'Success: Parameters saved and submitted') 
+            messagebox.showerror("Success", 'Parameters saved and submitted') 
         else:
-            msg = 'Error: %s\n and %s other errors.' % (errors[0], len(errors))
+            msg = '%s\n and %s other errors.' % (errors[0], len(errors))
             messagebox.showerror("Error", msg)
 
     def _validate_parameters(self, mode):
