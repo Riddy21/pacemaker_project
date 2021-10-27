@@ -62,20 +62,25 @@ class GUI(object):
     def _on_submit_login(self, username: str, password: str):
         self.user = get_user(username)
         if self.user is None:
-            tk.Label(self.frame, width=50, text="User not found.", pady=60).grid(row=4,columnspan=2)
+            tk.Label(self.frame, width=50, text="User not found.", fg='red', pady=60).grid(row=4,columnspan=2)
         elif self.user['password'] == password:
             self._create_dcm_screen()
         else:
-            tk.Label(self.frame, width=50, text="Incorrect password.", pady=60).grid(row=4,columnspan=2)
+            tk.Label(self.frame, width=50, text="Incorrect password.", fg='red', pady=60).grid(row=4,columnspan=2)
     
     def _on_submit_register(self, username: str, password: str):
-        user_created = create_user(username, password)
+        user_created = False
         device_id = 123 # change for assignment 2
-        if (get_number_of_users(device_id) >= 10):
+        if (get_number_of_users(device_id) > 10):
             tk.Label(self.frame, width=50, text="Maximum number of users reached.", fg='red', pady=60).grid(row=4,columnspan=2)
+            return
         elif(len(username)==0 or len(password)==0):
             tk.Label(self.frame, width=50, text="Username and password cannot be empty.", fg='red', pady=60).grid(row=4,columnspan=2)
-        elif user_created:
+            return
+        else:
+            user_created = create_user(username, password)
+
+        if user_created:
             self.user = get_user(username)
             self._create_dcm_screen()
         else:
