@@ -312,7 +312,8 @@ class GUI(object):
             update_operating_mode(self.user['username'], self.mode)
             messagebox.showerror("Success", 'Parameters saved and submitted') 
         else:
-            msg = '%s\n and %s other errors.' % (errors[0], len(errors))
+            other_errors_msg = '\n and %d other errors.' % (len(errors) - 1)
+            msg = errors[0] + (('\n and %d other errors.' % (len(errors) - 1)) if (len(errors)>1) else '')
             messagebox.showerror("Error", msg)
 
     def _validate_parameters(self, mode):
