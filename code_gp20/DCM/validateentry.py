@@ -1,6 +1,7 @@
 import tkinter as tk
 
 # NOTE: maybe change into an object in the future?
+# TODO: Change into an object which does cross checks for parameters
 
 def validate_lrl(lrl):
     try:
