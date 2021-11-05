@@ -34,7 +34,8 @@ def get_number_of_users(device_id: int):
 def update_parameters(username: str, parameters):
     user = get_user(username)
     for key in parameters:
-        user['parameters'][key] = parameters[key].get()
+        #user['parameters'][key] = parameters[key].get()
+        user['parameters'][key] = parameters[key]
     db.update({'parameters': user['parameters']}, UserQuery.username == username)
 
 def update_operating_mode(username: str, mode: str):

@@ -305,8 +305,10 @@ class GUI(object):
         if self.mode == '':
             messagebox.showerror("Error", 'No operating mode has been selected')
             return
+        #TODO: Fix all these
         valid_parameters = self._find_parameters_for_mode(self.parameters_dict, self.mode)
         valid, errors = self._validate_parameters(self.mode)
+
         if (valid):
             update_parameters(self.user['username'], valid_parameters)
             update_operating_mode(self.user['username'], self.mode)
@@ -316,6 +318,7 @@ class GUI(object):
             msg = errors[0] + (('\n and %d other errors.' % (len(errors) - 1)) if (len(errors)>1) else '')
             messagebox.showerror("Error", msg)
 
+    # TODO: redo this entire function
     def _validate_parameters(self, mode):
         all_valid = True
         errormessageset = []

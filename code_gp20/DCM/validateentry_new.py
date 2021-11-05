@@ -24,8 +24,53 @@ class ParameterManager(object):
                           'vrp': <tkinter.Entry object .!frame6.!entry7>,
                           'arp': <tkinter.Entry object .!frame6.!entry8>}
         """
+        # filters required parameters from the parameters dict and saves in new dict
         pass
-    # TODO: Cross Checks
-    # TODO: Interval Checks
-    # TODO: Range Checks
+
+    ##################
+    # Public methods #
+    ##################
+    # TODO: run checks
     # TODO: Return parameters
+
+    ###################
+    # Private methods #
+    ###################
+    # TODO: find_parameters for mode
+    def _find_parameters_for_mode(self, valid_parameters, parameters_dict):
+        """
+        Find all the valid parameters in parameter_dict using valid_parameters
+        and saves in new list
+        """
+        # Find all parameters and saves in new dict
+        # NOTE: Only has strings, not entry objects
+        # Returns new dict
+        pass
+
+    # TODO  Create type conversions
+    def _convert_parameter_types(self):
+        """
+        Converts the parameters_dict values into the correct type
+        """
+        pass
+
+    # TODO: Cross Checks
+    def _do_cross_checks(self):
+        """
+        Checks the compatibility of parameters on other related parameters
+        """
+        pass
+
+    # TODO: Interval Checks
+    def _do_interval_checks(self):
+        """
+        Checks the intervals of parameters
+        """
+        pass
+
+    # TODO: Range Checks
+    def _do_range_checks(self):
+        """
+        Checks the range of the parameters to make sure they are in correct range
+        """
+        pass
