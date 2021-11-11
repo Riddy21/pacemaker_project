@@ -32,7 +32,6 @@ class ParameterManager(object):
         """
         # filters required parameters from the parameters dict and saves in new dict
         self._parameters_dict = self._find_parameters_for_mode(valid_parameters, parameters_dict)
-        print(self._parameters_dict)
 
     ##################
     # Public methods #
@@ -76,17 +75,81 @@ class ParameterManager(object):
             _parameters_dict_new[parameter] = parameters_dict[parameter].get()
         # Returns new dict
         return _parameters_dict_new
+    
+    #-----------------------------------------------------------
+    # Type conversions 
+    #-----------------------------------------------------------
 
-    # TODO  Create type conversions
     def _convert_parameter_types(self):
         """
         Converts the parameters_dict values into the correct type
         """
         # Try to convert the types of each by calling the function
-        # Save to the parameters dict
-        # If a value error or some other error occurs
-            # Raise ParameterError with message
+        for parameter_name, parameter_value in self._parameters_dict.items():
+            # Save to the parameters dict
+            convert_func = getattr(self, "_convert_%s_value" % parameter_name)
+            self._parameters_dict[parameter_name] = convert_func(parameter_value)
+            print(self._parameters_dict)
+
+    def _convert_lower_rate_limit_value(self, value):
+        """
+        Lower rate limit input must be an integer incremented by 5
+        """
+        try:
+            lrl = int(value)
+            lrl = 5 * round(lrl/5)
+            return lrl
+        except ValueError:
+            raise ParameterError('Error: Lower rate limit input must be an integer')
+
+    def _convert_upper_rate_limit_value(self, value):
+        """
+        Upper rate limit input must be an integer incremented by 5
+        """
+        try:
+            url = int(value)
+            url = 5 * round(url/5)
+            return url
+        except ValueError:
+            raise ParameterError('Error: Lower rate limit input must be an integer')
+
+    def _convert_atrial_amplitude_value(self, value):
+        """
+        
+        """
         pass
+
+    def _convert_atrial_pw_value(self, value):
+        """
+        
+        """
+        pass
+
+    def _convert_ventricular_amplitude_value(self, value):
+        """
+        
+        """
+        pass
+
+    def _convert_ventricular_pw_value(self, value):
+        """
+        
+        """
+        pass
+
+    def _convert_vrp_value(self, value):
+        """
+        
+        """
+        pass
+
+    def _convert_arp_value(self, value):
+        """
+        
+        """
+        pass
+
+    #-----------------------------------------------------------
 
     # TODO: Cross Checks
     def _do_cross_checks(self):

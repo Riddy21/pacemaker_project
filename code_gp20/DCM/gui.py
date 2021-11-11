@@ -4,6 +4,7 @@ from device import *
 from db import *
 from tkinter import messagebox
 from validateentry import *
+from validateentry_new import ParameterManager
 
 VALID_PARAMETERS = {'aoo': ['lower_rate_limit',
                             'upper_rate_limit',
@@ -321,6 +322,7 @@ class GUI(object):
             else:
                 entry['state'] = 'disabled'
 
+    # TODO: delete this function
     def _find_parameters_for_mode(self, parameters_dict, mode):
         parameters_for_mode = dict()
         if mode not in VALID_PARAMETERS.keys():
@@ -342,6 +344,8 @@ class GUI(object):
             messagebox.showerror("Error", "No device connected")
             return
 
+        param_manager = ParameterManager(VALID_PARAMETERS[self.mode], self.parameters_dict)
+        param_manager.run_checks()
         valid_parameters = self._find_parameters_for_mode(self.parameters_dict, self.mode)
         valid, errors = self._validate_parameters(self.mode)
 
@@ -352,6 +356,15 @@ class GUI(object):
         else:
             msg = errors[0] + (('\n and %d other errors.' % (len(errors) - 1)) if (len(errors)>1) else '')
             messagebox.showerror("Error", msg)
+
+    # TODO: update entry based on increments when submitting
+    def _update_parameters(self, valid_parameters):
+        # update the parameter entries to use the new parameter values
+        for name, value in valid_parameters:
+            self.parameters_dict[name].delete(0, tk.END)
+            self.parameters_dict[name].insert(0, str(value))
+
+        self.update()
 
     # TODO: redo this entire function
     def _validate_parameters(self, mode):
