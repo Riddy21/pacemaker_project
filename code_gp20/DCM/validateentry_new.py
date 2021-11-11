@@ -1,3 +1,9 @@
+class ParameterError(Exception):
+    """
+    Error in parameter due to parameter checks
+    """
+    pass
+
 class ParameterManager(object):
     def __init__(self, valid_parameters, parameters_dict):
         """
@@ -25,13 +31,34 @@ class ParameterManager(object):
                           'arp': <tkinter.Entry object .!frame6.!entry8>}
         """
         # filters required parameters from the parameters dict and saves in new dict
-        pass
+        self._parameters_dict = self._find_parameters_for_mode(valid_parameters, parameters_dict)
+        print(self._parameters_dict)
 
     ##################
     # Public methods #
     ##################
     # TODO: run checks
+    def run_checks(self):
+        """
+        Run all the checks for the parameters
+        Returns error if failed and None if pass
+        """
+        # Convert parameters into the right types and output errors if it hits any
+        try:
+            self._convert_parameter_types()
+            self._do_cross_checks()
+            self._do_interval_checks()
+            self._do_range_checks()
+        except ParameterError as error:
+            return repr(error)
+
+        return None
     # TODO: Return parameters
+    def get_parameters(self):
+        """
+        Getter for final parameters
+        """
+        return self._parameters_dict
 
     ###################
     # Private methods #
@@ -42,16 +69,23 @@ class ParameterManager(object):
         Find all the valid parameters in parameter_dict using valid_parameters
         and saves in new list
         """
+        _parameters_dict_new = dict()
         # Find all parameters and saves in new dict
-        # NOTE: Only has strings, not entry objects
+        for parameter in valid_parameters:
+            # NOTE: Only has strings, not entry objects
+            _parameters_dict_new[parameter] = parameters_dict[parameter].get()
         # Returns new dict
-        pass
+        return _parameters_dict_new
 
     # TODO  Create type conversions
     def _convert_parameter_types(self):
         """
         Converts the parameters_dict values into the correct type
         """
+        # Try to convert the types of each by calling the function
+        # Save to the parameters dict
+        # If a value error or some other error occurs
+            # Raise ParameterError with message
         pass
 
     # TODO: Cross Checks
