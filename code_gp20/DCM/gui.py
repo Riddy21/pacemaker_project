@@ -1,5 +1,6 @@
 import tkinter as tk
 from tkinter.constants import W
+from device import *
 from db import *
 from tkinter import messagebox
 from validateentry import *
@@ -51,6 +52,9 @@ class GUI(object):
 
         # Default user
         self.user = None
+
+        # Default device
+        self.device = None
         
         #Mode arbitrarily selecting default
         self.mode = ""
@@ -203,11 +207,8 @@ class GUI(object):
         
         # Status
         status_label = tk.Label(self.frame, text='Status', pady=15)
-        device_connection = tk.Label(self.frame, fg='red', text='Device disconnected')
-        device_information = tk.Label(self.frame, fg='red', text='No device data available')
 
         submit_button = tk.Button(self.frame, text='Submit', width=10, height=5, command=lambda: self._submit_parameters())
-
         logout_button = tk.Button(self.frame, text='Logout', command=lambda: self._create_welcome_screen())
         close_button = tk.Button(self.frame, text='Close', command=lambda: self.quit_win())
 
@@ -245,8 +246,31 @@ class GUI(object):
         self.modes_dict['vvi'].grid(row=7, column=0, rowspan=2)
 
         # Status
-        device_connection.grid(row=1, column=3, columnspan=2)
-        device_information.grid(row=3, column=3, columnspan=2)
+        if self.device == None or not self.device.connected:
+            connect_button = tk.Button(self.frame, text='Connect', width=10, height=2, command=lambda: self._setup_device())
+            device_connection = tk.Label(self.frame, fg='red', text='Device disconnected')
+            device_information = tk.Label(self.frame, fg='red', text='No device data\navailable')
+
+            connect_button.grid(row=1, column = 3, columnspan=2)
+            device_connection.grid(row=2, column=3, columnspan=2)
+            device_information.grid(row=3, column=3, columnspan=2)
+        else:
+            disconnect_button = tk.Button(self.frame, text='Disconnect', width=10, height=2, command=lambda: self._disconnect_device())
+            egram_label = tk.Label(self.frame, text='Electrogram')
+            egram_options = [
+                'Atrium',
+                'Ventricle',
+                'Both'
+            ]
+            egram_variable = tk.StringVar(self.frame)
+            egram_variable.set(egram_options[0])
+            egram_dropdown = tk.OptionMenu(self.frame, egram_variable, *egram_options)
+            egram_button = tk.Button(self.frame, text='View Egram', width=10, height=1, command=lambda: self.device.display_egram())
+
+            disconnect_button.grid(row=1, column = 3, columnspan=2)
+            egram_label.grid(row=3, column=3, columnspan=2)
+            egram_dropdown.grid(row=4, column=3)
+            egram_button.grid(row=4, column=4)
 
         # Submit button
         submit_button.grid(row=7, column=3, rowspan=2, columnspan=2)
@@ -258,6 +282,14 @@ class GUI(object):
         self.frame.pack()
 
         self.state = "DCM"
+    
+    def _setup_device(self):
+        self.device = Device()
+        self._create_dcm_screen()
+    
+    def _disconnect_device(self):
+        self.device = None
+        self._create_dcm_screen()
         
     def _load_user_defaults(self):
         # get the right state
@@ -305,7 +337,11 @@ class GUI(object):
         if self.mode == '':
             messagebox.showerror("Error", 'No operating mode has been selected')
             return
-        #TODO: Fix all these
+
+        if self.device == None or not self.device.connected:
+            messagebox.showerror("Error", "No device connected")
+            return
+
         valid_parameters = self._find_parameters_for_mode(self.parameters_dict, self.mode)
         valid, errors = self._validate_parameters(self.mode)
 
@@ -314,7 +350,6 @@ class GUI(object):
             update_operating_mode(self.user['username'], self.mode)
             messagebox.showerror("Success", 'Parameters saved and submitted') 
         else:
-            other_errors_msg = '\n and %d other errors.' % (len(errors) - 1)
             msg = errors[0] + (('\n and %d other errors.' % (len(errors) - 1)) if (len(errors)>1) else '')
             messagebox.showerror("Error", msg)
 
