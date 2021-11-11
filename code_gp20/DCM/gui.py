@@ -256,12 +256,21 @@ class GUI(object):
             device_information.grid(row=3, column=3, columnspan=2)
         else:
             disconnect_button = tk.Button(self.frame, text='Disconnect', width=10, height=2, command=lambda: self._disconnect_device())
-            device_connection = tk.Label(self.frame, fg='red', text='Device connected')
-            egram_button = tk.Button(self.frame, text='View Egram', width=10, height=2, command=lambda: self.device.display_egram())
+            egram_label = tk.Label(self.frame, text='Electrogram')
+            egram_options = [
+                'Atrium',
+                'Ventricle',
+                'Both'
+            ]
+            egram_variable = tk.StringVar(self.frame)
+            egram_variable.set(egram_options[0])
+            egram_dropdown = tk.OptionMenu(self.frame, egram_variable, *egram_options)
+            egram_button = tk.Button(self.frame, text='View Egram', width=10, height=1, command=lambda: self.device.display_egram())
 
             disconnect_button.grid(row=1, column = 3, columnspan=2)
-            device_connection.grid(row=2, column=3, columnspan=2)
-            egram_button.grid(row=3, column=3, columnspan=2)
+            egram_label.grid(row=3, column=3, columnspan=2)
+            egram_dropdown.grid(row=4, column=3)
+            egram_button.grid(row=4, column=4)
 
         # Submit button
         submit_button.grid(row=7, column=3, rowspan=2, columnspan=2)
