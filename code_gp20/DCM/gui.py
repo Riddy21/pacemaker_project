@@ -181,14 +181,14 @@ class GUI(object):
 
         # Parameters
         parameter_label = tk.Label(self.frame, text='DCM Parameters', pady=15)
-        lower_rate_limit = tk.Label(self.frame, text='Lower rate limit', pady=10) #all
-        upper_rate_limit = tk.Label(self.frame, text='Upper rate limit', pady=10)#all
-        atrial_amplitude = tk.Label(self.frame, text='Atrial amplitude', pady=10)#AOO, AAI
-        atrial_pw = tk.Label(self.frame, text='Atrial pulse width', pady=10)#AAO, AAI
-        ventricular_amplitude = tk.Label(self.frame, text='Ventricular Amplitude', pady=10)#VOO, VVI
-        ventricular_pw = tk.Label(self.frame, text='Ventricular pulse width', pady=10)#VOO, VVI
-        vrp = tk.Label(self.frame, text='VRP', pady=10)#VVI
-        arp = tk.Label(self.frame, text='ARP', pady=10)#AAI
+        lower_rate_limit = tk.Label(self.frame, text='Lower rate limit (ppm)', pady=10) #all
+        upper_rate_limit = tk.Label(self.frame, text='Upper rate limit (ppm)', pady=10)#all
+        atrial_amplitude = tk.Label(self.frame, text='Atrial amplitude (V)', pady=10)#AOO, AAI
+        atrial_pw = tk.Label(self.frame, text='Atrial pulse width (ms)', pady=10)#AAO, AAI
+        ventricular_amplitude = tk.Label(self.frame, text='Ventricular Amplitude (V)', pady=10)#VOO, VVI
+        ventricular_pw = tk.Label(self.frame, text='Ventricular pulse width (ms)', pady=10)#VOO, VVI
+        vrp = tk.Label(self.frame, text='VRP (ms)', pady=10)#VVI
+        arp = tk.Label(self.frame, text='ARP (ms)', pady=10)#AAI
 
         self.parameters_dict['lower_rate_limit'] = tk.Entry(self.frame) #all
         self.parameters_dict['upper_rate_limit'] = tk.Entry(self.frame) #all
