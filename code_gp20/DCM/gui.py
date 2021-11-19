@@ -4,7 +4,7 @@ from device import *
 from db import *
 from tkinter import messagebox
 from validateentry import *
-from validateentry_new import ParameterManager
+from validateentry_new import ParameterManager, ParameterError
 
 VALID_PARAMETERS = {'aoo': ['lower_rate_limit',
                             'upper_rate_limit',
@@ -322,19 +322,6 @@ class GUI(object):
             else:
                 entry['state'] = 'disabled'
 
-    # TODO: delete this function
-    def _find_parameters_for_mode(self, parameters_dict, mode):
-        parameters_for_mode = dict()
-        if mode not in VALID_PARAMETERS.keys():
-            print("ERROR: Internal error, invalid mode given to _find_parameters_for_mode.")
-            return False
-        for parameter, entry in parameters_dict.items():
-            if parameter in VALID_PARAMETERS[mode]:
-                parameters_for_mode[parameter] = entry
-
-        return parameters_for_mode
-
-
     def _submit_parameters(self):
         if self.mode == '':
             messagebox.showerror("Error", 'No operating mode has been selected')
@@ -345,93 +332,26 @@ class GUI(object):
             return
 
         param_manager = ParameterManager(VALID_PARAMETERS[self.mode], self.parameters_dict)
-        param_manager.run_checks()
-        valid_parameters = self._find_parameters_for_mode(self.parameters_dict, self.mode)
-        valid, errors = self._validate_parameters(self.mode)
+        error = param_manager.run_checks()
+        valid_parameters = param_manager.get_parameters()
+        self._update_parameter_entries(valid_parameters)
 
-        if (valid):
-            update_parameters(self.user['username'], valid_parameters)
-            update_operating_mode(self.user['username'], self.mode)
-            messagebox.showerror("Success", 'Parameters saved and submitted') 
-        else:
-            msg = errors[0] + (('\n and %d other errors.' % (len(errors) - 1)) if (len(errors)>1) else '')
-            messagebox.showerror("Error", msg)
+        if error:
+            messagebox.showerror("Error", error)
+            return
 
-    # TODO: update entry based on increments when submitting
-    def _update_parameters(self, valid_parameters):
+        update_parameters(self.user['username'], valid_parameters)
+        update_operating_mode(self.user['username'], self.mode)
+        messagebox.showerror("Success", 'Parameters saved and submitted') 
+
+    # update entry based on increments when submitting
+    def _update_parameter_entries(self, valid_parameters):
         # update the parameter entries to use the new parameter values
-        for name, value in valid_parameters:
+        for name, value in valid_parameters.items():
             self.parameters_dict[name].delete(0, tk.END)
             self.parameters_dict[name].insert(0, str(value))
 
         self.update()
-
-    # TODO: redo this entire function
-    def _validate_parameters(self, mode):
-        all_valid = True
-        errormessageset = []
-
-        if mode not in VALID_PARAMETERS.keys():
-            print("ERROR: Internal error, invalid mode given to _validate_parameters")
-            return False
-
-        #lrl
-        valid, errormessage = validate_lrl(self.parameters_dict['lower_rate_limit'].get())
-        if(errormessage != ''):
-            errormessageset.append(errormessage)
-        all_valid = all_valid and valid
-
-
-        #url
-        valid, errormessage = validate_url(self.parameters_dict['upper_rate_limit'].get())
-        if(errormessage != ''):
-            errormessageset.append(errormessage)
-        all_valid = all_valid and valid
-
-
-        #aa
-        if(mode == "aoo" or mode == "aai"):
-            valid, errormessage = validate_regulated_atrial_amp(self.parameters_dict['atrial_amplitude'].get())
-            if(errormessage != ''):
-                errormessageset.append(errormessage)
-        all_valid = all_valid and valid
-
-        #apw
-        if(mode == "aoo" or mode == "aai"):
-            valid, errormessage = validate_atrial_pw(self.parameters_dict['atrial_pw'].get())
-            if(errormessage != ''):
-                errormessageset.append(errormessage)
-        all_valid = all_valid and valid
-
-        #va
-        if(mode == "voo" or mode == "vvi"):
-            valid, errormessage = validate_regulated_ventricular_amp(self.parameters_dict['ventricular_amplitude'].get())
-            if(errormessage != ''):
-                errormessageset.append(errormessage)
-        all_valid = all_valid and valid
-
-        #vpw
-        if(mode == "voo" or mode == "vvi"):
-            valid, errormessage = validate_ventricular_pw(self.parameters_dict['ventricular_pw'].get())
-            if(errormessage != ''):
-                errormessageset.append(errormessage)
-        all_valid = all_valid and valid
-
-        #vrp
-        if(mode == "vvi"):
-            valid, errormessage = validate_vrp(self.parameters_dict['vrp'].get())
-            if(errormessage != ''):
-                errormessageset.append(errormessage)
-        all_valid = all_valid and valid
-
-        #arp
-        if(mode == "aai"):
-            valid, errormessage = validate_arp(self.parameters_dict['arp'].get())
-            if(errormessage != ''):
-                errormessageset.append(errormessage)
-        all_valid = all_valid and valid
-           
-        return all_valid, errormessageset
 
                 
     def quit_win(self):

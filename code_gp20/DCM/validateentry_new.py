@@ -48,7 +48,7 @@ class ParameterManager(object):
             self._do_range_checks()
             self._do_cross_checks()
         except ParameterError as error:
-            return repr(error)
+            return str(error)
 
         return None
     # Return parameters
@@ -101,6 +101,7 @@ class ParameterManager(object):
                 lrl = int(5 * round(lrl/5))
             return lrl
         except ValueError:
+            self._parameters_dict['lower_rate_limit'] = ""
             raise ParameterError('Error: Lower rate limit input must be a number')
 
     def _convert_upper_rate_limit_value(self, value):
@@ -112,6 +113,7 @@ class ParameterManager(object):
             url = int(5 * round(url/5))
             return url
         except ValueError:
+            self._parameters_dict['upper_rate_limit'] = ""
             raise ParameterError('Error: Upper rate limit input must be a number')
 
     def _convert_atrial_amplitude_value(self, value):
@@ -119,14 +121,12 @@ class ParameterManager(object):
         Atrial amplitude must be float incremented by 0.1V
         """
         try:
-            aa = float(value)
-            if 0.5 <= aa <= 3.2:
-                aa = float("{:.1f}".format(value))
-            else:
-                aa = float("{:.1f}".format(value))
+            aa = float("{:.1f}".format(float(value)))
+            if (3.5 <= aa <= 7.0):
                 aa = round(2 * aa) / 2.0
             return aa
         except ValueError:
+            self._parameters_dict['atrial_amplitude'] = ""
             raise ParameterError('Error: Atrial amplitude input must be a number')
 
     def _convert_atrial_pw_value(self, value):
@@ -134,12 +134,10 @@ class ParameterManager(object):
         Atrial pw must be float incremented by 0.1ms
         """
         try:
-            apw = round(20 * float(value)) / 20.0
-            if apw <= 0.05:
-                return apw
-            apw = float("{:.1f}".format(value))
+            apw = float("{:.1f}".format(float(value)))
             return apw
         except ValueError:
+            self._parameters_dict['atrial_pw'] = ""
             raise ParameterError('Error: Atrial pulse width input must be a number')
 
     def _convert_ventricular_amplitude_value(self, value):
@@ -147,11 +145,12 @@ class ParameterManager(object):
         Ventricular amplitude must be float incremented by 0.1V
         """
         try:
-            va = float("{:.1f}".format(value))
+            va = float("{:.1f}".format(float(value)))
             if (3.5 <= va <= 7.0):
                 va = round(2 * va) / 2.0
             return va
         except ValueError:
+            self._parameters_dict['ventricular_amplitude'] = ""
             raise ParameterError('Error: Ventricular amplitude input must be a number')
 
     def _convert_ventricular_pw_value(self, value):
@@ -159,12 +158,10 @@ class ParameterManager(object):
         Ventricular pulse width must be float incremented by 0.1ms
         """
         try:
-            vpw = round(20 * float(value)) / 20.0
-            if vpw <= 0.05:
-                return vpw
-            vpw = float("{:.1f}".format(value))
+            vpw = float("{:.1f}".format(float(value)))
             return vpw
         except ValueError:
+            self._parameters_dict['ventricular_pw'] = ""
             raise ParameterError('Error: Ventricular pulse width input must be a number')
 
     def _convert_vrp_value(self, value):
@@ -176,6 +173,7 @@ class ParameterManager(object):
             vrp = int(10 * round(vrp/10))
             return vrp
         except ValueError:
+            self._parameters_dict['vrp'] = ""
             raise ParameterError('Error: VRP input must be a number')
 
     def _convert_arp_value(self, value):
@@ -187,6 +185,7 @@ class ParameterManager(object):
             arp = int(10 * round(arp/10))
             return arp
         except ValueError:
+            self._parameters_dict['arp'] = ""
             raise ParameterError('Error: ARP input must be a number')
 
     #-----------------------------------------------------------
@@ -204,22 +203,87 @@ class ParameterManager(object):
 
     def _check_lower_rate_limit_range(self, value):
         """
-        Lower rate limit
+        Lower rate limit must be between 30 and 175 ppm
         """
+        if not (30 <= value <= 175):
+            self._parameters_dict['lower_rate_limit'] = ""
+            raise ParameterError('Error: Lower rate limit input must be between 30 - 175 ppm')
+
     def _check_upper_rate_limit_range(self, value):
+        """
+        Upper rate limit must be between 50 and 175 ppm
+        """
+        if not (30 <= value <= 175):
+            self._parameters_dict['upper_rate_limit'] = ""
+            raise ParameterError('Error: Upper rate limit input must be between 30 - 175 ppm')
+
     def _check_atrial_amplitude_range(self, value):
+        """
+        Atrial amplitude range must be in ranges 0, 0.5-3.2, 3.5-7
+        """
+        if value != 0 and not (0.5 <= value <= 3.2) and not (3.5 <= value <= 7):
+            self._parameters_dict['atrial_amplitude'] = ""
+            raise ParameterError('Error: Atrial amplitude must be in ranges 0, 0.5-3.2, 3.5-7 V')
+
     def _check_atrial_pw_range(self, value):
+        """
+        Atrial pw must be 0.05 or 0.1 - 1.9 ms
+        """
+        if value != 0.05 and not (0.1 <= value <= 1.9):
+            self._parameters_dict['atrial_pw'] = ""
+            raise ParameterError('Error: Atrial pulse width must be 0.05ms or in range 0.1ms-1.9ms')
+
     def _check_ventricular_amplitude_range(self, value):
+        """
+        Ventricular amplitude range must be in ranges 0, 0.5-3.2, 3.5-7
+        """
+        if value != 0 and not (0.5 <= value <= 3.2) and not (3.5 <= value <= 7):
+            self._parameters_dict['ventricular_amplitude'] = ""
+            raise ParameterError('Error: Ventricular amplitude must be in ranges 0, 0.5-3.2, 3.5-7 V')
+
     def _check_ventricular_pw_range(self, value):
+        """
+        Ventricular pw must be 0.05 or 0.1 - 1.9 ms
+        """
+        if value != 0.05 and not (0.1 <= value <= 1.9):
+            self._parameters_dict['ventricular_pw'] = ""
+            raise ParameterError('Error: Ventricular pulse width must be 0.05ms or in range 0.1ms-1.9ms')
+
     def _check_vrp_range(self, value):
+        """
+        Ventricular refactory period must be in range 150ms - 500ms
+        """
+        if not (150 <= value <= 500):
+            self._parameters_dict['vrp'] = ""
+            raise ParameterError('Error: Ventricular refactory period must be in range 150ms - 500ms')
     def _check_arp_range(self, value):
+        """
+        Atrial refactory period must be in range 150ms - 500ms
+        """
+        if not (150 <= value <= 500):
+            self._parameters_dict['arp'] = ""
+            raise ParameterError('Error: Atrial refactory period must be in range 150ms - 500ms')
 
     #-----------------------------------------------------------
-    # TODO: Cross Checks
+    # Cross Checks
     #-----------------------------------------------------------
     def _do_cross_checks(self):
         """
         Checks the compatibility of parameters on other related parameters
         """
-        pass
+        # Iterate through all combintations of checks and find name
+        for parameter_1, value_1 in self._parameters_dict.items():
+            for parameter_2, value_2 in self._parameters_dict.items():
+                try:
+                    cross_check_func = getattr(self, "_cross_check_%s_vs_%s" % (parameter_1, parameter_2))
+                    cross_check_func(value_1, value_2)
+                except AttributeError:
+                    continue
+
+    def _cross_check_lower_rate_limit_vs_upper_rate_limit(self, lrl, url):
+        if lrl >= url:
+            self._parameters_dict['lower_rate_limit'] = ""
+            self._parameters_dict['upper_rate_limit'] = ""
+            print(self._parameters_dict)
+            raise ParameterError("Error: Lower rate limit must be smaller than the upper rate limit")
 
