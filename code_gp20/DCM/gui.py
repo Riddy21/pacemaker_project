@@ -3,8 +3,7 @@ from tkinter.constants import W
 from device import *
 from db import *
 from tkinter import messagebox
-from validateentry import *
-from validateentry_new import ParameterManager, ParameterError
+from validateentry import ParameterManager, ParameterError
 
 VALID_PARAMETERS = {'aoo': ['lower_rate_limit',
                             'upper_rate_limit',
