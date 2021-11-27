@@ -1,9 +1,14 @@
 import tkinter as tk
+import sys
+import glob
+import serial.tools.list_ports
 from tkinter.constants import W
 from device import *
 from db import *
 from tkinter import messagebox
 from validateentry import ParameterManager, ParameterError
+from serialcom import SerialManager 
+#from serial import *
 
 VALID_PARAMETERS = {'aoo': ['lower_rate_limit',
                             'upper_rate_limit',
@@ -62,6 +67,9 @@ class GUI(object):
         # declare needed buttons and entries
         self.modes_dict = dict()
         self.parameters_dict = dict()
+
+        # Start serial manager
+        self.serial = SerialManager()
 
     def _on_submit_login(self, username: str, password: str):
         self.user = get_user(username)
@@ -284,7 +292,16 @@ class GUI(object):
         self.state = "DCM"
     
     def _setup_device(self):
-        self.device = Device()
+
+        available_ports = self.serial._get_ports()
+
+        selectedPort = ""
+
+        while(not(selectedPort in available_ports)):
+            selectedPort = input("Select Port ")
+
+        self.serial._init_serial(selectedPort)
+
         self._create_dcm_screen()
     
     def _disconnect_device(self):
