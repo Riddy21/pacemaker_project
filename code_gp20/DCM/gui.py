@@ -265,7 +265,7 @@ class GUI(object):
             egram_variable = tk.StringVar(self.frame)
             egram_variable.set(egram_options[0])
             egram_dropdown = tk.OptionMenu(self.frame, egram_variable, *egram_options)
-            egram_button = tk.Button(self.frame, text='View Egram', width=10, height=1, command=lambda: self.device.display_egram())
+            egram_button = tk.Button(self.frame, text='View Egram', width=10, height=1, command=lambda: self.device.display_egram(egram_variable.get()))
 
             disconnect_button.grid(row=1, column = 3, columnspan=2)
             egram_label.grid(row=3, column=3, columnspan=2)
