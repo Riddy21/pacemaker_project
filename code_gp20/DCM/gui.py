@@ -3,7 +3,6 @@ import sys
 import glob
 import serial.tools.list_ports
 from tkinter.constants import W
-from device import *
 from db import *
 from tkinter import messagebox
 from validateentry import ParameterManager, ParameterError
@@ -57,9 +56,6 @@ class GUI(object):
 
         # Default user
         self.user = None
-
-        # Default device
-        self.device = None
         
         #Mode arbitrarily selecting default
         self.mode = ""
@@ -68,8 +64,8 @@ class GUI(object):
         self.modes_dict = dict()
         self.parameters_dict = dict()
 
-        # Start serial manager
-        self.serial = SerialManager()
+        # Default serial manager
+        self.serial = None
 
     def _on_submit_login(self, username: str, password: str):
         self.user = get_user(username)
@@ -254,7 +250,7 @@ class GUI(object):
         self.modes_dict['vvi'].grid(row=7, column=0, rowspan=2)
 
         # Status
-        if self.device == None or not self.device.connected:
+        if self.serial == None:
             connect_button = tk.Button(self.frame, text='Connect', width=10, height=2, command=lambda: self._setup_device())
             device_connection = tk.Label(self.frame, fg='red', text='Device disconnected')
             device_information = tk.Label(self.frame, fg='red', text='No device data\navailable')
@@ -273,7 +269,7 @@ class GUI(object):
             egram_variable = tk.StringVar(self.frame)
             egram_variable.set(egram_options[0])
             egram_dropdown = tk.OptionMenu(self.frame, egram_variable, *egram_options)
-            egram_button = tk.Button(self.frame, text='View Egram', width=10, height=1, command=lambda: self.device.display_egram(egram_variable.get()))
+            egram_button = tk.Button(self.frame, text='View Egram', width=10, height=1, command=lambda: self.serial.display_egram(egram_variable.get()))
 
             disconnect_button.grid(row=1, column = 3, columnspan=2)
             egram_label.grid(row=3, column=3, columnspan=2)
@@ -292,6 +288,7 @@ class GUI(object):
         self.state = "DCM"
     
     def _setup_device(self):
+        self.serial = SerialManager()
 
         available_ports = self.serial._get_ports()
 
@@ -305,7 +302,7 @@ class GUI(object):
         self._create_dcm_screen()
     
     def _disconnect_device(self):
-        self.device = None
+        self.serial = None
         self._create_dcm_screen()
         
     def _load_user_defaults(self):
@@ -343,7 +340,7 @@ class GUI(object):
             messagebox.showerror("Error", 'No operating mode has been selected')
             return
 
-        if self.device == None or not self.device.connected:
+        if self.serial == None:
             messagebox.showerror("Error", "No device connected")
             return
 
