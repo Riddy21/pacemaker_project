@@ -343,6 +343,10 @@ class GUI(object):
         if self.serial == None:
             messagebox.showerror("Error", "No device connected")
             return
+        
+        if self.serial.is_plotting_egram():
+            messagebox.showerror("Error", "Exit egram before submitting parameters")
+            return
 
         param_manager = ParameterManager(VALID_PARAMETERS[self.mode], self.parameters_dict)
         error = param_manager.run_checks()

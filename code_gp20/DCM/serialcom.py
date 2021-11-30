@@ -5,6 +5,12 @@ import serial.tools.list_ports
 import matplotlib.pyplot as plt
 import numpy as np
 
+MODES = {
+    'Atrium': 1,
+    'Ventricle': 2,
+    'Both': 3
+}
+
 plt.style.use('ggplot')
 
 #Hardcoded Baud Rate
@@ -80,7 +86,12 @@ class SerialManager(object):
         except:
             print("Could not recieve data")
     
+    def is_plotting_egram(self):
+        return self.continue_plotting;
+    
     def display_egram(self, mode):
+        # TODO: Send command to pacemaker to start receiving egram information
+
         self.continue_plotting = True
         if (mode == 'Atrium' or mode == 'Ventricle'):
             self.create_single_plot(mode)
@@ -138,6 +149,7 @@ class SerialManager(object):
             fig.canvas.mpl_connect('close_event', self.on_close)
     
     def on_close(self, event):
+        # TODO: Send stop command to pacemaker to stop receiving egram information
         self.continue_plotting = False
 
     def plot(self, x, y, data, ax, mode):
