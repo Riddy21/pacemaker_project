@@ -11,6 +11,16 @@ MODES = {
     'Both': 3
 }
 
+ACTIVITY_THRESHOLD = {
+    'V-Low': 1,
+    'Low': 2,
+    'Med-Low': 3,
+    'Med': 4,
+    'Med-High': 5,
+    'High': 6,
+    'V-High': 7
+}
+
 plt.style.use('ggplot')
 
 #Hardcoded Baud Rate
@@ -46,7 +56,7 @@ class SerialManager(object):
         except:
             print("Unable to establish serial connection")
 
-    def _serial_out(valid_parameters, parameters_dict, operating_mode):
+    def _serial_out(self, valid_parameters, parameters_dict, operating_mode):
 
         #Send pacemaker data
 
@@ -96,28 +106,28 @@ class SerialManager(object):
                 else:
                     outData.append(np.unit16(0))
                 #av_delay       uint16
-                if('av_delay' in valid_parameters[operating_mode]):
-                    outData.append(np.unit16(parameters_dict.get('av_delay')))
+                if('fixed_av_delay' in valid_parameters[operating_mode]):
+                    outData.append(np.unit16(parameters_dict.get('fixed_av_delay')))
                 else:
                     outData.append(np.unit16(0))
                 #reaction       double
-                if('reaction' in valid_parameters[operating_mode]):
-                    outData.append(np.double(parameters_dict.get('reaction')))
+                if('reaction_time' in valid_parameters[operating_mode]):
+                    outData.append(np.double(parameters_dict.get('reaction_time')))
                 else:
                     outData.append(np.double(0))
                 #recovery       double
-                if('recovery' in valid_parameters[operating_mode]):
-                    outData.append(np.double(parameters_dict.get('recovery')))
+                if('recovery_time' in valid_parameters[operating_mode]):
+                    outData.append(np.double(parameters_dict.get('recovery_time')))
                 else:
                     outData.append(np.double(0))
                 #threshold      single
-                if('threshold' in valid_parameters[operating_mode]):
-                    outData.append(np.single(parameters_dict.get('threshold')))
+                if('activity_threshold' in valid_parameters[operating_mode]):
+                    outData.append(np.single(ACTIVITY_THRESHOLD.get(parameters_dict.get('activity_threshold'))))
                 else:
                     outData.append(np.single(0))
                 #msr            double
-                if('msr' in valid_parameters[operating_mode]):
-                    outData.append(np.double(parameters_dict.get('msr')))
+                if('max_sensor_rate' in valid_parameters[operating_mode]):
+                    outData.append(np.double(parameters_dict.get('max_sensor_rate')))
                 else:
                     outData.append(np.double(0))
                 #lrl            uint16
