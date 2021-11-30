@@ -174,13 +174,21 @@ class SerialManager(object):
         return self.continue_plotting;
     
     def display_egram(self, mode):
-        # TODO: Send command to pacemaker to start receiving egram information
+        try:
+            self.serialPort.write(MODES[mode]) # Request data from pacemaker based on egram-plotting mode
+        except:
+            print('Unable to request egram data from pacemaker')
+            return
 
         self.continue_plotting = True
-        if (mode == 'Atrium' or mode == 'Ventricle'):
-            self._create_single_plot(mode)
-        elif (mode == 'Both'):
-            self._create_double_plot()
+        try:
+            if (mode == 'Atrium' or mode == 'Ventricle'):
+                self._create_single_plot(mode)
+            elif (mode == 'Both'):
+                self._create_double_plot()
+        except:
+            print('Unable to receive egram data from pacemaker')
+            return
     
     def _create_single_plot(self, mode):
         plt.ion()
@@ -233,7 +241,7 @@ class SerialManager(object):
             fig.canvas.mpl_connect('close_event', self.on_close)
     
     def _on_close(self, event):
-        # TODO: Send stop command to pacemaker to stop receiving egram information (stop == 4)
+        self.serialPort.write(4) # Stop command to pacemaker
         self.continue_plotting = False
 
     def _plot(self, x, y, data, ax, mode):
