@@ -188,7 +188,7 @@ class SerialManager(object):
         size = 100
         ax = fig.add_subplot(111)
         ax.axes.xaxis.set_visible(False) # x-axis is only used to plot, doesn't mean anything so hidden
-        ax.set_ylim([-3,3])
+        ax.set_ylim([-5,5])
         x = np.linspace(0,1,size+1)[0:-1]
         y = [0]*len(x)
         data = []
@@ -208,7 +208,7 @@ class SerialManager(object):
         # Atrium
         ax_a = fig.add_subplot(211)
         ax_a.axes.xaxis.set_visible(False)
-        ax_a.set_ylim([-3,3])
+        ax_a.set_ylim([-5,5])
         x_a = np.linspace(0,1,size+1)[0:-1]
         y_a = [0]*len(x_a)
         data_a = []
@@ -233,7 +233,7 @@ class SerialManager(object):
             fig.canvas.mpl_connect('close_event', self.on_close)
     
     def _on_close(self, event):
-        # TODO: Send stop command to pacemaker to stop receiving egram information
+        # TODO: Send stop command to pacemaker to stop receiving egram information (stop == 4)
         self.continue_plotting = False
 
     def _plot(self, x, y, data, ax, mode):
