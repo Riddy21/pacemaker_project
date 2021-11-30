@@ -46,7 +46,7 @@ class SerialManager(object):
         except:
             print("Unable to establish serial connection")
 
-    def _serial_out(self, serialOut, valid_parameters, parameters_dict):
+    def _serial_out(self, serialOut, valid_parameters, parameters_dict, operating_mode):
 
         #Send pacemaker data
 
@@ -59,13 +59,69 @@ class SerialManager(object):
                 outData.append(b'\x16')
 
                 #Append all valid parameters to output
-                for parameter in sorted(parameters_dict.items()):
-                    if parameter in valid_parameters:
-                        outData.append(parameter)
+                #for parameter in sorted(parameters_dict.items()):
+                #    if parameter in valid_parameters:
+                #        outData.append(parameter)
 
-                #write each parameter to output
-                for parameter in outData:
-                    serialOut.write(parameter)
+                #Write each parameter to output
+                #for parameter in outData:
+                #    serialOut.write(parameter)
+
+                #New write parameters
+                outData.append[parameters_dict.get('operating_mode')]
+                if('atrial_amplitude' in valid_parameters[operating_mode]):
+                    outData.append(parameters_dict,get('atrial_amplitude'))
+                else:
+                    outData.append(double 0)
+                if('atrial_amplitude' in valid_parameters[operating_mode]):
+                    outData.append(parameters_dict,get('atrial_amplitude'))
+                else:
+                    outData.append(double 0)
+                if('atrial_amplitude' in valid_parameters[operating_mode]):
+                    outData.append(parameters_dict,get('atrial_amplitude'))
+                else:
+                    outData.append(double 0)
+                if('atrial_amplitude' in valid_parameters[operating_mode]):
+                    outData.append(parameters_dict,get('atrial_amplitude'))
+                else:
+                    outData.append(double 0)
+                if('atrial_amplitude' in valid_parameters[operating_mode]):
+                    outData.append(parameters_dict,get('atrial_amplitude'))
+                else:
+                    outData.append(double 0)
+                if('atrial_amplitude' in valid_parameters[operating_mode]):
+                    outData.append(parameters_dict,get('atrial_amplitude'))
+                else:
+                    outData.append(double 0)
+                if('atrial_amplitude' in valid_parameters[operating_mode]):
+                    outData.append(parameters_dict,get('atrial_amplitude'))
+                else:
+                    outData.append(double 0)
+                if('atrial_amplitude' in valid_parameters[operating_mode]):
+                    outData.append(parameters_dict,get('atrial_amplitude'))
+                else:
+                    outData.append(double 0)
+                if('atrial_amplitude' in valid_parameters[operating_mode]):
+                    outData.append(parameters_dict,get('atrial_amplitude'))
+                else:
+                    outData.append(double 0)
+                if('atrial_amplitude' in valid_parameters[operating_mode]):
+                    outData.append(parameters_dict,get('atrial_amplitude'))
+                else:
+                    outData.append(double 0)
+                if('atrial_amplitude' in valid_parameters[operating_mode]):
+                    outData.append(parameters_dict,get('atrial_amplitude'))
+                else:
+                    outData.append(double 0)
+                if('atrial_amplitude' in valid_parameters[operating_mode]):
+                    outData.append(parameters_dict,get('atrial_amplitude'))
+                else:
+                    outData.append(double 0)
+                if('atrial_amplitude' in valid_parameters[operating_mode]):
+                    outData.append(parameters_dict,get('atrial_amplitude'))
+                else:
+                    outData.append(double 0)
+                
 
         except:
             print("Unable to send data")
