@@ -4,25 +4,7 @@ from device import *
 from db import *
 from tkinter import messagebox
 from validateentry import ParameterManager, ParameterError
-
-VALID_PARAMETERS = {'aoo': ['lower_rate_limit',
-                            'upper_rate_limit',
-                            'atrial_amplitude',
-                            'atrial_pw'],
-                    'voo': ['lower_rate_limit',
-                            'upper_rate_limit',
-                            'ventricular_amplitude', 
-                            'ventricular_pw'],
-                    'aai': ['lower_rate_limit', 
-                            'upper_rate_limit', 
-                            'atrial_amplitude', 
-                            'atrial_pw', 
-                            'arp'],
-                    'vvi': ['lower_rate_limit', 
-                            'upper_rate_limit', 
-                            'ventricular_amplitude', 
-                            'ventricular_pw',
-                            'vrp']}
+from valid_parameters import VALID_PARAMETERS
 
 class GUI(object):
     def __init__(self):
@@ -182,21 +164,49 @@ class GUI(object):
         parameter_label = tk.Label(self.frame, text='DCM Parameters', pady=15)
         lower_rate_limit = tk.Label(self.frame, text='Lower rate limit (ppm)', pady=10) #all
         upper_rate_limit = tk.Label(self.frame, text='Upper rate limit (ppm)', pady=10)#all
+        max_sensor_rate = tk.Label(self.frame, text='Maximum sensor rate (ppm)', pady=10)
+        fixed_av_delay = tk.Label(self.frame, text='Fixed AV delay (ms)', pady=10)
         atrial_amplitude = tk.Label(self.frame, text='Atrial amplitude (V)', pady=10)#AOO, AAI
         atrial_pw = tk.Label(self.frame, text='Atrial pulse width (ms)', pady=10)#AAO, AAI
+        atrial_sensitivity = tk.Label(self.frame, text='Atrial sensitivity (mV)', pady=10)
         ventricular_amplitude = tk.Label(self.frame, text='Ventricular Amplitude (V)', pady=10)#VOO, VVI
         ventricular_pw = tk.Label(self.frame, text='Ventricular pulse width (ms)', pady=10)#VOO, VVI
+        ventricular_sensitivity = tk.Label(self.frame, text='Ventricular sensitivity (mV)', pady=10)
         vrp = tk.Label(self.frame, text='VRP (ms)', pady=10)#VVI
         arp = tk.Label(self.frame, text='ARP (ms)', pady=10)#AAI
+        pvarp = tk.Label(self.frame, text='PVARP (ms)', pady=10)
+        hysteresis = tk.Label(self.frame, text='Hysteresis rate limit', pady=10)
+        rate_smoothing = tk.Label(self.frame, text='Rate Smoothing (%)', pady=10)
+        activity_threshold = tk.Label(self.frame, text='Activity threshold', pady=10)
+        reaction_time = tk.Label(self.frame, text='Reaction Time (sec)', pady=10)
+        response_factor = tk.Label(self.frame, text='Response Factor', pady=10)
+        recovery_time = tk.Label(self.frame, text='Recovery Time (min)', pady=10)
 
+        # FIXME: Think of way to have radio button for Hysteresis implemented
+        # FIXME: Find way to implement activity threshold correctly
+        # FIXME: ask team how they handle parameters passed to DCM
+
+        rate_smoothing_options = ['On', 'Off']
+        activity_threshold_options = ['V-Low', 'Low', 'Med-Low', 'Med', 'Med-High', 'High', 'V-High']
         self.parameters_dict['lower_rate_limit'] = tk.Entry(self.frame) #all
         self.parameters_dict['upper_rate_limit'] = tk.Entry(self.frame) #all
+        self.parameters_dict['max_sensor_rate'] = tk.Entry(self.frame)
+        self.parameters_dict['fixed_av_delay'] = tk.Entry(self.frame)
         self.parameters_dict['atrial_amplitude'] = tk.Entry(self.frame) #AOO, AAI
         self.parameters_dict['atrial_pw'] = tk.Entry(self.frame) #AAO, AAI
+        self.parameters_dict['atrial_sensitivity'] = tk.Entry(self.frame)
         self.parameters_dict['ventricular_amplitude'] = tk.Entry(self.frame) #VOO, VVI
         self.parameters_dict['ventricular_pw'] = tk.Entry(self.frame) #VOO, VVI
+        self.parameters_dict['ventricular_sensitivity'] = tk.Entry(self.frame)
         self.parameters_dict['vrp'] = tk.Entry(self.frame) #VVI
         self.parameters_dict['arp'] = tk.Entry(self.frame) #AAI
+        self.parameters_dict['pvarp'] = tk.Entry(self.frame)
+        self.parameters_dict['hysteresis'] = tk.Entry(self.frame)
+        self.parameters_dict['rate_smoothing'] = tk.Radiobutton(self.frame, text=rate_smoothing_options)
+        self.parameters_dict['activity_threshold'] = tk.Radiobutton(self.frame, text=activity_threshold_options)
+        self.parameters_dict['reaction_time'] = tk.Entry(self.frame)
+        self.parameters_dict['response_factor'] = tk.Entry(self.frame)
+        self.parameters_dict['recovery_time'] = tk.Entry(self.frame)
 
         # Operating modes
         modes_label = tk.Label(self.frame, text='Operating Modes', pady=15)

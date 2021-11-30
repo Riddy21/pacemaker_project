@@ -1,0 +1,20 @@
+New Modes:
+    DOO
+    AOOR
+    VOOR
+    AAIR
+    VVIR
+    DOOR
+
+New parameters:
+    Fixed AV Delay
+    Maximum sensor rate
+    Reaction Time
+    Response factor
+    activity threshold
+    Recovery time
+    Atrial sensitivity
+    ventricular sensitivity
+    PVARP
+    Hysteresis
+    Rate smoothing
