@@ -46,12 +46,12 @@ class SerialManager(object):
         except:
             print("Unable to establish serial connection")
 
-    def _serial_out(self, serialOut, valid_parameters, parameters_dict, operating_mode):
+    def _serial_out(valid_parameters, parameters_dict, operating_mode):
 
         #Send pacemaker data
 
         try:
-            if(serialOut.is_open):
+            if(self.serialPort.is_open):
 
                 outData = []
 
@@ -130,13 +130,13 @@ class SerialManager(object):
                 outData.append(b'\x17')
 
                 for data in outData:
-                    serialOut.write(data)
+                    self.serialPort.write(data)
 
                 #Wait for confirmation
                 recieved = False
 
                 while(not recieved):
-                    dataIn = serialOut.read()
+                    dataIn = self.serialPort.read()
                     if dataIn == 1:
                         return True
                 

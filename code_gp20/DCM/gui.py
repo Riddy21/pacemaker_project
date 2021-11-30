@@ -357,9 +357,11 @@ class GUI(object):
             messagebox.showerror("Error", error)
             return
 
-        update_parameters(self.user['username'], valid_parameters)
-        update_operating_mode(self.user['username'], self.mode)
-        messagebox.showerror("Success", 'Parameters saved and submitted') 
+        success = SerialManager._serial_out(valid_parameters, self.parameters_dict, self.mode)
+        if(success):
+            messagebox.showerror("Success", 'Parameters saved and submitted') 
+        else:
+            messagebox.showerror("Error", "Parameters not successfully submitted")
 
     # update entry based on increments when submitting
     def _update_parameter_entries(self, valid_parameters):
