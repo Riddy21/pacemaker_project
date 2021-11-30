@@ -201,9 +201,7 @@ class SerialManager(object):
         y = [0]*len(x)
         data = []
         while self.continue_plotting:
-            # if mode == Atrium, pin = ATR_SIGNAL
-            # if mode == Ventricle, pin = VENT_SIGNAL
-            y[-1] = np.random.randn() # TODO: do serial read to get new value
+            y[-1] = self.serialPort.read()
             data = self.plot(x, y, data, ax, mode) # updates data
             y = np.append(y[1:],0.0)
             fig.canvas.mpl_connect('close_event', self.on_close)
@@ -230,10 +228,9 @@ class SerialManager(object):
         data_v = []
 
         while self.continue_plotting:
-            # Atrium: pin = ATR_SIGNAL
-            # Ventricle: pin = VENT_SIGNAL
-            y_a[-1] = np.random.randn() # TODO: do serial read to get new value from atrium
-            y_v[-1] = np.random.randn() # TODO: do serial read to get new value from ventricle
+            y = self.serialPort.read()
+            y_a[-1] = np.random.randn() # TODO: figure out how A/V data is going to be differentiated
+            y_v[-1] = np.random.randn() # TODO: figure out how A/V data is going to be differentiated
             data_a = self.plot(x_a, y_a, data_a, ax_a, 'Atrium') # updates data for atrium
             data_v = self.plot(x_v, y_v, data_v, ax_v, 'Ventricle') # updates data for ventricle
             y_a = np.append(y_a[1:],0.0)
@@ -250,6 +247,6 @@ class SerialManager(object):
             ax.title.set_text('%s Electrogram' % (mode))
             plt.show()
         
-        data.set_ydata(y)    
+        data.set_ydata(y)
         plt.pause(0.1)
         return data
