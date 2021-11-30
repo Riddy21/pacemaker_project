@@ -82,9 +82,9 @@ class SerialManager(object):
                     outData.append(np.unit16(0))
                 #atrial amp     double
                 if('atrial_amplitude' in valid_parameters[operating_mode]):
-                    outData.append(parameters_dict,get('atrial_amplitude'))
+                    outData.append(np.double(parameters_dict,get('atrial_amplitude')))
                 else:
-                    outData.append(double 0)
+                    outData.append(np.double(0))
                 #vent amp       double
                 if('ventricular_amplitude' in valid_parameters[operating_mode]):
                     outData.append(np.double(parameters_dict.get('ventricular_amplitude')))
@@ -137,7 +137,7 @@ class SerialManager(object):
 
                 while(not recieved):
                     dataIn = serialOut.read()
-                    if dataIn = 1:
+                    if dataIn == 1:
                         return True
                 
 
