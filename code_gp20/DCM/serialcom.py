@@ -58,69 +58,87 @@ class SerialManager(object):
                 #Start Flag
                 outData.append(b'\x16')
 
-                #Append all valid parameters to output
-                #for parameter in sorted(parameters_dict.items()):
-                #    if parameter in valid_parameters:
-                #        outData.append(parameter)
-
-                #Write each parameter to output
-                #for parameter in outData:
-                #    serialOut.write(parameter)
-
                 #New write parameters
                 outData.append[parameters_dict.get('operating_mode')]
+                #atrial amp     double
+                if('atrial_amplitude' in valid_parameters[operating_mode]):
+                    outData.append(np.double(parameters_dict.get('atrial_amplitude')))
+                else:
+                    outData.append(np.double(0))
+                #atrial pw      unit16
+                if('atrial_pw' in valid_parameters[operating_mode]):
+                    outData.append(np.unit16(parameters_dict.get('atrial_pw')))
+                else:
+                    outData.append(np.unit16(0))
+                #arp            uint16
+                if('arp' in valid_parameters[operating_mode]):
+                    outData.append(np.unit16(parameters_dict.get('arp')))
+                else:
+                    outData.append(np.unit16(0))
+                #vrp            uint16
+                if('vrp' in valid_parameters[operating_mode]):
+                    outData.append(np.unit16(parameters_dict.get('vrp')))
+                else:
+                    outData.append(np.unit16(0))
+                #atrial amp     double
                 if('atrial_amplitude' in valid_parameters[operating_mode]):
                     outData.append(parameters_dict,get('atrial_amplitude'))
                 else:
                     outData.append(double 0)
-                if('atrial_amplitude' in valid_parameters[operating_mode]):
-                    outData.append(parameters_dict,get('atrial_amplitude'))
+                #vent amp       double
+                if('ventricular_amplitude' in valid_parameters[operating_mode]):
+                    outData.append(np.double(parameters_dict.get('ventricular_amplitude')))
                 else:
-                    outData.append(double 0)
-                if('atrial_amplitude' in valid_parameters[operating_mode]):
-                    outData.append(parameters_dict,get('atrial_amplitude'))
+                    outData.append(np.double(0))
+                #vent pw        uint16
+                if('ventricular_pw' in valid_parameters[operating_mode]):
+                    outData.append(np.unit16(parameters_dict.get('ventricular_pw')))
                 else:
-                    outData.append(double 0)
-                if('atrial_amplitude' in valid_parameters[operating_mode]):
-                    outData.append(parameters_dict,get('atrial_amplitude'))
+                    outData.append(np.unit16(0))
+                #av_delay       uint16
+                if('av_delay' in valid_parameters[operating_mode]):
+                    outData.append(np.unit16(parameters_dict.get('av_delay')))
                 else:
-                    outData.append(double 0)
-                if('atrial_amplitude' in valid_parameters[operating_mode]):
-                    outData.append(parameters_dict,get('atrial_amplitude'))
+                    outData.append(np.unit16(0))
+                #reaction       double
+                if('reaction' in valid_parameters[operating_mode]):
+                    outData.append(np.double(parameters_dict.get('reaction')))
                 else:
-                    outData.append(double 0)
-                if('atrial_amplitude' in valid_parameters[operating_mode]):
-                    outData.append(parameters_dict,get('atrial_amplitude'))
+                    outData.append(np.double(0))
+                #recovery       double
+                if('recovery' in valid_parameters[operating_mode]):
+                    outData.append(np.double(parameters_dict.get('recovery')))
                 else:
-                    outData.append(double 0)
-                if('atrial_amplitude' in valid_parameters[operating_mode]):
-                    outData.append(parameters_dict,get('atrial_amplitude'))
+                    outData.append(np.double(0))
+                #threshold      single
+                if('threshold' in valid_parameters[operating_mode]):
+                    outData.append(np.single(parameters_dict.get('threshold')))
                 else:
-                    outData.append(double 0)
-                if('atrial_amplitude' in valid_parameters[operating_mode]):
-                    outData.append(parameters_dict,get('atrial_amplitude'))
+                    outData.append(np.single(0))
+                #msr            double
+                if('msr' in valid_parameters[operating_mode]):
+                    outData.append(np.double(parameters_dict.get('msr')))
                 else:
-                    outData.append(double 0)
-                if('atrial_amplitude' in valid_parameters[operating_mode]):
-                    outData.append(parameters_dict,get('atrial_amplitude'))
+                    outData.append(np.double(0))
+                #lrl            uint16
+                if('lrl' in valid_parameters[operating_mode]):
+                    outData.append(np.unit16(parameters_dict.get('lrl')))
                 else:
-                    outData.append(double 0)
-                if('atrial_amplitude' in valid_parameters[operating_mode]):
-                    outData.append(parameters_dict,get('atrial_amplitude'))
-                else:
-                    outData.append(double 0)
-                if('atrial_amplitude' in valid_parameters[operating_mode]):
-                    outData.append(parameters_dict,get('atrial_amplitude'))
-                else:
-                    outData.append(double 0)
-                if('atrial_amplitude' in valid_parameters[operating_mode]):
-                    outData.append(parameters_dict,get('atrial_amplitude'))
-                else:
-                    outData.append(double 0)
-                if('atrial_amplitude' in valid_parameters[operating_mode]):
-                    outData.append(parameters_dict,get('atrial_amplitude'))
-                else:
-                    outData.append(double 0)
+                    outData.append(np.unit16(0))
+                
+                #End flag
+                outData.append(b'\x17')
+
+                for data in outData:
+                    serialOut.write(data)
+
+                #Wait for confirmation
+                recieved = False
+
+                while(not recieved):
+                    dataIn = serialOut.read()
+                    if dataIn = 1:
+                        return True
                 
 
         except:
