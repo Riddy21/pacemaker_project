@@ -178,11 +178,11 @@ class SerialManager(object):
 
         self.continue_plotting = True
         if (mode == 'Atrium' or mode == 'Ventricle'):
-            self.create_single_plot(mode)
+            self._create_single_plot(mode)
         elif (mode == 'Both'):
-            self.create_double_plot()
+            self._create_double_plot()
     
-    def create_single_plot(self, mode):
+    def _create_single_plot(self, mode):
         plt.ion()
         fig = plt.figure(figsize=(13,6))
         size = 100
@@ -200,7 +200,7 @@ class SerialManager(object):
             y = np.append(y[1:],0.0)
             fig.canvas.mpl_connect('close_event', self.on_close)
     
-    def create_double_plot(self):
+    def _create_double_plot(self):
         plt.ion()
         fig = plt.figure(figsize=(13,12))
         size = 100
@@ -232,11 +232,11 @@ class SerialManager(object):
             y_v = np.append(y_v[1:],0.0)
             fig.canvas.mpl_connect('close_event', self.on_close)
     
-    def on_close(self, event):
+    def _on_close(self, event):
         # TODO: Send stop command to pacemaker to stop receiving egram information
         self.continue_plotting = False
 
-    def plot(self, x, y, data, ax, mode):
+    def _plot(self, x, y, data, ax, mode):
         if data==[]:
             data, = ax.plot(x,y)        
             ax.title.set_text('%s Electrogram' % (mode))
