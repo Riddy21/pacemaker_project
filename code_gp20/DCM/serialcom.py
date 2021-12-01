@@ -85,11 +85,6 @@ class SerialManager(object):
                     outData.append(np.unit16(parameters_dict.get('vrp')))
                 else:
                     outData.append(np.unit16(0))
-                #atrial amp     double
-                if('atrial_amplitude' in valid_parameters[operating_mode]):
-                    outData.append(np.double(parameters_dict,get('atrial_amplitude')))
-                else:
-                    outData.append(np.double(0))
                 #vent amp       double
                 if('ventricular_amplitude' in valid_parameters[operating_mode]):
                     outData.append(np.double(parameters_dict.get('ventricular_amplitude')))
@@ -152,18 +147,6 @@ class SerialManager(object):
 
         #Verify data
         #XOR bytes
-
-
-    def _serial_in(serialIn):
-        
-        try:
-            if(serialIn.is_open):
-                inData = []
-
-                while():
-                    inData.append(serialIn.read)
-        except:
-            print("Could not recieve data")
     
     def is_plotting_egram(self):
         return self.continue_plotting;
