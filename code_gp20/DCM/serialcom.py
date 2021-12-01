@@ -4,12 +4,7 @@ import glob
 import serial.tools.list_ports
 import matplotlib.pyplot as plt
 import numpy as np
-
-MODES = {
-    'Atrium': 1,
-    'Ventricle': 2,
-    'Both': 3
-}
+import struct
 
 ACTIVITY_THRESHOLD = {
     'V-Low': 1,
@@ -175,7 +170,7 @@ class SerialManager(object):
     
     def display_egram(self, mode):
         try:
-            self.serialPort.write(MODES[mode]) # Request data from pacemaker based on egram-plotting mode
+            self.serialPort.write(1) # Request data from pacemaker based on egram-plotting mode
         except:
             print('Unable to request egram data from pacemaker')
             return
@@ -201,7 +196,13 @@ class SerialManager(object):
         y = [0]*len(x)
         data = []
         while self.continue_plotting:
-            y[-1] = self.serialPort.read()
+            read = self.serialPort.read(16)
+            if (mode == 'Atrium'):
+                reconstruct = struct.unpack('d', read[:8])
+                y[-1] = reconstruct[0]
+            elif (mode == 'Ventricle'):
+                reconstruct = struct.unpack('d', read[8:])
+                y[-1] = reconstruct[0]
             data = self._plot(x, y, data, ax, mode) # updates data
             y = np.append(y[1:],0.0)
             fig.canvas.mpl_connect('close_event', self._on_close)
@@ -222,15 +223,17 @@ class SerialManager(object):
         # Ventricle
         ax_v = fig.add_subplot(212)
         ax_v.axes.xaxis.set_visible(False)
-        ax_v.set_ylim([-3,3])
+        ax_v.set_ylim([-5,5])
         x_v = np.linspace(0,1,size+1)[0:-1]
         y_v = [0]*len(x_a)
         data_v = []
 
         while self.continue_plotting:
-            y = self.serialPort.read()
-            y_a[-1] = np.random.randn() # TODO: figure out how A/V data is going to be differentiated
-            y_v[-1] = np.random.randn() # TODO: figure out how A/V data is going to be differentiated
+            read = self.serialPort.read(16)
+            reconstruct_a = struct.unpack('d', read[:8])
+            reconstruct_v = struct.unpack('d', read[8:])
+            y_a[-1] = reconstruct_a[0]
+            y_v[-1] = reconstruct_v[0]
             data_a = self._plot(x_a, y_a, data_a, ax_a, 'Atrium') # updates data for atrium
             data_v = self._plot(x_v, y_v, data_v, ax_v, 'Ventricle') # updates data for ventricle
             y_a = np.append(y_a[1:],0.0)
@@ -238,7 +241,7 @@ class SerialManager(object):
             fig.canvas.mpl_connect('close_event', self._on_close)
     
     def _on_close(self, event):
-        self.serialPort.write(4) # Stop command to pacemaker
+        self.serialPort.write(2) # Stop command to pacemaker
         self.continue_plotting = False
 
     def _plot(self, x, y, data, ax, mode):
