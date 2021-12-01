@@ -71,83 +71,74 @@ class SerialManager(object):
 
         if(self.serialPort.is_open):
 
-            outData = []
-
             #Start Flag
-            outData.append(b'\x16')
+            self.serialPort.write(b'\x16')
 
             #New write parameters
-            outData.append(OPERATING_MODE.get(parameters_dict.get('operating_mode')))
+            self.serialPort.write(OPERATING_MODE.get(parameters_dict.get('operating_mode')))
             #atrial amp     double
             if('atrial_amplitude' in valid_parameters[operating_mode]):
-                outData.append(np.double(parameters_dict.get('atrial_amplitude')))
+                self.serialPort.write(np.double(parameters_dict.get('atrial_amplitude')))
             else:
-                outData.append(np.double(0))
+                self.serialPort.write(np.double(0))
             #atrial pw      unit16
             if('atrial_pw' in valid_parameters[operating_mode]):
-                outData.append(np.unit16(parameters_dict.get('atrial_pw')))
+                self.serialPort.write(np.unit16(parameters_dict.get('atrial_pw')))
             else:
-                outData.append(np.unit16(0))
+                self.serialPort.write(np.unit16(0))
             #arp            uint16
             if('arp' in valid_parameters[operating_mode]):
-                outData.append(np.unit16(parameters_dict.get('arp')))
+                self.serialPort.write(np.unit16(parameters_dict.get('arp')))
             else:
-                outData.append(np.unit16(0))
+                self.serialPort.write(np.unit16(0))
             #vrp            uint16
             if('vrp' in valid_parameters[operating_mode]):
-                outData.append(np.unit16(parameters_dict.get('vrp')))
+                self.serialPort.write(np.unit16(parameters_dict.get('vrp')))
             else:
-                outData.append(np.unit16(0))
+                self.serialPort.write(np.unit16(0))
             #vent amp       double
             if('ventricular_amplitude' in valid_parameters[operating_mode]):
-                outData.append(np.double(parameters_dict.get('ventricular_amplitude')))
+                self.serialPort.write(np.double(parameters_dict.get('ventricular_amplitude')))
             else:
-                outData.append(np.double(0))
+                self.serialPort.write(np.double(0))
             #vent pw        uint16
             if('ventricular_pw' in valid_parameters[operating_mode]):
-                outData.append(np.unit16(parameters_dict.get('ventricular_pw')))
+                self.serialPort.write(np.unit16(parameters_dict.get('ventricular_pw')))
             else:
-                outData.append(np.unit16(0))
+                self.serialPort.write(np.unit16(0))
             #av_delay       uint16
             if('fixed_av_delay' in valid_parameters[operating_mode]):
-                outData.append(np.unit16(parameters_dict.get('fixed_av_delay')))
+                self.serialPort.write(np.unit16(parameters_dict.get('fixed_av_delay')))
             else:
-                outData.append(np.unit16(0))
+                self.serialPort.write(np.unit16(0))
             #reaction       double
             if('reaction_time' in valid_parameters[operating_mode]):
-                outData.append(np.double(parameters_dict.get('reaction_time')))
+                self.serialPort.write(np.double(parameters_dict.get('reaction_time')))
             else:
-                outData.append(np.double(0))
+                self.serialPort.write(np.double(0))
             #recovery       double
             if('recovery_time' in valid_parameters[operating_mode]):
-                outData.append(np.double(parameters_dict.get('recovery_time')))
+                self.serialPort.write(np.double(parameters_dict.get('recovery_time')))
             else:
-                outData.append(np.double(0))
+                self.serialPort.write(np.double(0))
             #threshold      single
             if('activity_threshold' in valid_parameters[operating_mode]):
-                outData.append(np.single(ACTIVITY_THRESHOLD.get(parameters_dict.get('activity_threshold'))))
+                self.serialPort.write(np.single(ACTIVITY_THRESHOLD.get(parameters_dict.get('activity_threshold'))))
             else:
-                outData.append(np.single(0))
+                self.serialPort.write(np.single(0))
             #msr            double
             if('max_sensor_rate' in valid_parameters[operating_mode]):
-                outData.append(np.double(parameters_dict.get('max_sensor_rate')))
+                self.serialPort.write(np.double(parameters_dict.get('max_sensor_rate')))
             else:
-                outData.append(np.double(0))
+                self.serialPort.write(np.double(0))
             #lrl            uint16
             if('lrl' in valid_parameters[operating_mode]):
-                outData.append(np.unit16(parameters_dict.get('lrl')))
+                self.serialPort.write(np.unit16(parameters_dict.get('lrl')))
             else:
-                outData.append(np.unit16(0))
+                self.serialPort.write(np.unit16(0))
             
             #End flag
-            outData.append(b'\x17')
-
-            print("Outdata Built")
-
-            for data in outData:
-                self.serialPort.write(data)
-
-            print("OutData Sent")
+            self.serialPort.write(b'\x17')
 
             #Wait for confirmation
             recieved = self.serialPort.read(17)
