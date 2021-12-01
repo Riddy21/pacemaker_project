@@ -136,8 +136,8 @@ class SerialManager(object):
                 recieved = False
 
                 while(not recieved):
-                    dataIn = self.serialPort.read()
-                    if dataIn == 1:
+                    dataIn = self.serialPort.read(  )
+                    if dataIn == (b'\x00001'):
                         return True
                 
 
