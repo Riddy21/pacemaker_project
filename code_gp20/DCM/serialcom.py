@@ -232,7 +232,7 @@ class SerialManager(object):
     def _on_close(self, event):
         self.continue_plotting = False
         for i in range(59):
-                self.serialPort.write(2) # 59 2s signal to pacemaker to stop egram data
+                self.serialPort.write(b'\x55') # Signals to pacemaker to stop egram data
 
     def _plot(self, x, y, data, ax, mode):
         if data==[]:
