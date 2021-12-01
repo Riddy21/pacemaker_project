@@ -202,9 +202,9 @@ class SerialManager(object):
         data = []
         while self.continue_plotting:
             y[-1] = self.serialPort.read()
-            data = self.plot(x, y, data, ax, mode) # updates data
+            data = self._plot(x, y, data, ax, mode) # updates data
             y = np.append(y[1:],0.0)
-            fig.canvas.mpl_connect('close_event', self.on_close)
+            fig.canvas.mpl_connect('close_event', self._on_close)
     
     def _create_double_plot(self):
         plt.ion()
@@ -231,11 +231,11 @@ class SerialManager(object):
             y = self.serialPort.read()
             y_a[-1] = np.random.randn() # TODO: figure out how A/V data is going to be differentiated
             y_v[-1] = np.random.randn() # TODO: figure out how A/V data is going to be differentiated
-            data_a = self.plot(x_a, y_a, data_a, ax_a, 'Atrium') # updates data for atrium
-            data_v = self.plot(x_v, y_v, data_v, ax_v, 'Ventricle') # updates data for ventricle
+            data_a = self._plot(x_a, y_a, data_a, ax_a, 'Atrium') # updates data for atrium
+            data_v = self._plot(x_v, y_v, data_v, ax_v, 'Ventricle') # updates data for ventricle
             y_a = np.append(y_a[1:],0.0)
             y_v = np.append(y_v[1:],0.0)
-            fig.canvas.mpl_connect('close_event', self.on_close)
+            fig.canvas.mpl_connect('close_event', self._on_close)
     
     def _on_close(self, event):
         self.serialPort.write(4) # Stop command to pacemaker
