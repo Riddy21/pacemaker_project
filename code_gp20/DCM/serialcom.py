@@ -43,7 +43,7 @@ class SerialManager(object):
         self.serialPort = ""
         self.continue_plotting = False
 
-    def _get_ports(self):
+    def get_ports(self):
 
         available_ports = serial.tools.list_ports.comports(False)
         port_names = []
@@ -53,7 +53,7 @@ class SerialManager(object):
 
         return port_names
 
-    def _init_serial(self, newport):
+    def init_serial(self, newport):
         try:
             
             self.port = newport
@@ -65,7 +65,7 @@ class SerialManager(object):
         except:
             messagebox.showerror("Error","Unable to establish serial connection")
 
-    def _serial_out(self, valid_parameters, parameters_dict, operating_mode):
+    def serial_out(self, valid_parameters, parameters_dict, operating_mode):
 
         #Send pacemaker data
 

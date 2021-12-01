@@ -300,7 +300,7 @@ class GUI(object):
         if not self.serial.serialPort:
             connect_button = tk.Button(self.frame, text='Connect', width=10, height=2, command=lambda: self._setup_device())
             refresh_button = tk.Button(self.frame, text='Refresh', width=10, height=2, command=lambda: self._refresh_devices())
-            self.port_selection = ttk.Combobox(self.frame, value=self.serial._get_ports())
+            self.port_selection = ttk.Combobox(self.frame, value=self.serial.get_ports())
             device_connection = tk.Label(self.frame, fg='red', text='Device disconnected')
             device_information = tk.Label(self.frame, fg='red', text='No device data\navailable')
 
@@ -339,12 +339,9 @@ class GUI(object):
         self.state = "DCM"
     
     def _setup_device(self):
-
-        available_ports = self.serial._get_ports()
-
         selectedPort = self.port_selection.get()
 
-        self.serial._init_serial(selectedPort)
+        self.serial.init_serial(selectedPort)
 
         self._create_dcm_screen()
 
@@ -407,7 +404,7 @@ class GUI(object):
             messagebox.showerror("Error", error)
             return
 
-        success = self.serial._serial_out(VALID_PARAMETERS, valid_parameters, self.mode)
+        success = self.serial.serial_out(VALID_PARAMETERS, valid_parameters, self.mode)
         if(success):
             messagebox.showerror("Success", 'Parameters saved and submitted') 
         else:
