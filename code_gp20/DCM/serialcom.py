@@ -181,7 +181,7 @@ class SerialManager(object):
 
             #End flag
             self.serialPort.write(b'\x17')
-            print(np.uint8(b'\x17'))
+            print(b'\x17')
             print("wrote end flag")
 
             #Wait for confirmation
