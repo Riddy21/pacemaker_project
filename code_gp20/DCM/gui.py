@@ -407,7 +407,7 @@ class GUI(object):
             messagebox.showerror("Error", error)
             return
 
-        success = self.serial._serial_out(valid_parameters, self.parameters_dict, self.mode)
+        success = self.serial._serial_out(VALID_PARAMETERS, self.parameters_dict, self.mode)
         if(success):
             messagebox.showerror("Success", 'Parameters saved and submitted') 
         else:
