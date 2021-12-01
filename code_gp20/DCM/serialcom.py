@@ -199,7 +199,6 @@ class SerialManager(object):
         y = [0]*len(x)
         data = []
         while self.continue_plotting:
-            print('Reading data...')
             read = self.serialPort.read(17)
             if (mode == 'Atrium'):
                 reconstruct = struct.unpack('d', read[1:9])
