@@ -75,7 +75,7 @@ class SerialManager(object):
             self.serialPort.write(b'\x16')
 
             #New write parameters
-            self.serialPort.write(OPERATING_MODE.get(parameters_dict.get('operating_mode')))
+            self.serialPort.write(np.unit8(OPERATING_MODE.get(parameters_dict.get('operating_mode'))))
             #atrial amp     double
             if('atrial_amplitude' in valid_parameters[operating_mode]):
                 self.serialPort.write(np.double(parameters_dict.get('atrial_amplitude')))
