@@ -169,10 +169,10 @@ class GUI(object):
         fixed_av_delay = tk.Label(self.frame, text='Fixed AV delay (ms)', pady=10)
         atrial_amplitude = tk.Label(self.frame, text='Atrial amplitude (V)', pady=10)#AOO, AAI
         atrial_pw = tk.Label(self.frame, text='Atrial pulse width (ms)', pady=10)#AAO, AAI
-        atrial_sensitivity = tk.Label(self.frame, text='Atrial sensitivity (mV)', pady=10)
+        atrial_sensitivity = tk.Label(self.frame, text='Atrial sensitivity (V)', pady=10)
         ventricular_amplitude = tk.Label(self.frame, text='Ventricular Amplitude (V)', pady=10)#VOO, VVI
         ventricular_pw = tk.Label(self.frame, text='Ventricular pulse width (ms)', pady=10)#VOO, VVI
-        ventricular_sensitivity = tk.Label(self.frame, text='Ventricular sensitivity (mV)', pady=10)
+        ventricular_sensitivity = tk.Label(self.frame, text='Ventricular sensitivity (V)', pady=10)
         vrp = tk.Label(self.frame, text='VRP (ms)', pady=10)#VVI
         arp = tk.Label(self.frame, text='ARP (ms)', pady=10)#AAI
         pvarp = tk.Label(self.frame, text='PVARP (ms)', pady=10)

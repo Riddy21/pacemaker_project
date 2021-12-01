@@ -122,8 +122,8 @@ class ParameterManager(object):
         """
         try:
             aa = float("{:.1f}".format(float(value)))
-            if (3.5 <= aa <= 7.0):
-                aa = round(2 * aa) / 2.0
+            ##if (3.5 <= aa <= 7.0):
+            ##    aa = round(2 * aa) / 2.0
             return aa
         except ValueError:
             self._parameters_dict['atrial_amplitude'] = ""
@@ -134,7 +134,8 @@ class ParameterManager(object):
         Atrial pw must be float incremented by 0.1ms
         """
         try:
-            apw = float("{:.1f}".format(float(value)))
+            #apw = float("{:.1f}".format(float(value)))
+            apw = int(value)
             return apw
         except ValueError:
             self._parameters_dict['atrial_pw'] = ""
@@ -146,8 +147,8 @@ class ParameterManager(object):
         """
         try:
             va = float("{:.1f}".format(float(value)))
-            if (3.5 <= va <= 7.0):
-                va = round(2 * va) / 2.0
+            #if (3.5 <= va <= 7.0):
+            #    va = round(2 * va) / 2.0
             return va
         except ValueError:
             self._parameters_dict['ventricular_amplitude'] = ""
@@ -155,10 +156,11 @@ class ParameterManager(object):
 
     def _convert_ventricular_pw_value(self, value):
         """
-        Ventricular pulse width must be float incremented by 0.1ms
+        Ventricular pulse width must be float incremented by 1ms
         """
         try:
-            vpw = float("{:.1f}".format(float(value)))
+            #vpw = float("{:.1f}".format(float(value)))
+            vpw = int(value)
             return vpw
         except ValueError:
             self._parameters_dict['ventricular_pw'] = ""
@@ -216,13 +218,16 @@ class ParameterManager(object):
         """
         atrial sensitivity must be a float with increments of 0.5mV
         """
+        if value == '':
+            # FIXME: Change based on hardware team's response
+            return ''
         try:
             atrial_sens = float("{:.1f}".format(float(value)))
-            if (0 <= atrial_sens <= 1.0):
-                atrial_sens = round(4 * atrial_sens) / 4.0
-            else:
-                atrial_sens = round(2 * atrial_sens) / 2.0
-            
+            #if (0 <= atrial_sens <= 1.0):
+            #    atrial_sens = round(4 * atrial_sens) / 4.0
+            #else:
+            #    atrial_sens = round(2 * atrial_sens) / 2.0
+
             return atrial_sens
         except ValueError:
             self._parameters_dict['atrial_sensitivity'] = ""
@@ -232,12 +237,15 @@ class ParameterManager(object):
         """
         ventricular sensitivity must be a float with increments of 0.5mV
         """
+        if value == '':
+            # FIXME: Change based on hardware team's response
+            return ''
         try:
             ventricular_sens = float("{:.1f}".format(float(value)))
-            if (0 <= ventricular_sens <= 1.0):
-                ventricular_sens = round(4 * ventricular_sens) / 4.0
-            else:
-                ventricular_sens = round(2 * ventricular_sens) / 2.0
+            #if (0 <= ventricular_sens <= 1.0):
+            #    ventricular_sens = round(4 * ventricular_sens) / 4.0
+            #else:
+            #    ventricular_sens = round(2 * ventricular_sens) / 2.0
 
             return ventricular_sens
         except ValueError:
@@ -357,35 +365,35 @@ class ParameterManager(object):
 
     def _check_atrial_amplitude_range(self, value):
         """
-        Atrial amplitude range must be in ranges 0, 0.5-3.2, 3.5-7
+        Atrial amplitude range must be in ranges 0-5.0
         """
-        if value != 0 and not (0.5 <= value <= 3.2) and not (3.5 <= value <= 7):
+        if not (0 <= value <= 5.0):
             self._parameters_dict['atrial_amplitude'] = ""
-            raise ParameterError('Error: Atrial amplitude must be in ranges 0, 0.5-3.2, 3.5-7 V')
+            raise ParameterError('Error: Atrial amplitude must be in ranges 0V - 5V')
 
     def _check_atrial_pw_range(self, value):
         """
-        Atrial pw must be 0.05 or 0.1 - 1.9 ms
+        Atrial pw must be 1-30
         """
-        if value != 0.05 and not (0.1 <= value <= 1.9):
+        if not (1 <= value <= 30):
             self._parameters_dict['atrial_pw'] = ""
-            raise ParameterError('Error: Atrial pulse width must be 0.05ms or in range 0.1ms-1.9ms')
+            raise ParameterError('Error: Atrial pulse width must be 1ms - 30ms')
 
     def _check_ventricular_amplitude_range(self, value):
         """
-        Ventricular amplitude range must be in ranges 0, 0.5-3.2, 3.5-7
+        Ventricular amplitude range must be in ranges 0-5.0
         """
-        if value != 0 and not (0.5 <= value <= 3.2) and not (3.5 <= value <= 7):
+        if not (0 <= value <= 5.0):
             self._parameters_dict['ventricular_amplitude'] = ""
-            raise ParameterError('Error: Ventricular amplitude must be in ranges 0, 0.5-3.2, 3.5-7 V')
+            raise ParameterError('Error: Ventricular amplitude must be in ranges 0V - 5V')
 
     def _check_ventricular_pw_range(self, value):
         """
-        Ventricular pw must be 0.05 or 0.1 - 1.9 ms
+        Ventricular pw must be 1-30
         """
-        if value != 0.05 and not (0.1 <= value <= 1.9):
+        if not (1 <= value <= 30):
             self._parameters_dict['ventricular_pw'] = ""
-            raise ParameterError('Error: Ventricular pulse width must be 0.05ms or in range 0.1ms-1.9ms')
+            raise ParameterError('Error: Ventricular pulse width must be 1ms - 30ms')
 
     def _check_vrp_range(self, value):
         """
@@ -420,19 +428,23 @@ class ParameterManager(object):
 
     def _check_atrial_sensitivity_range(self, value):
         """
-        Atrial sensitivity must be between 0.25 and 10
+        Atrial sensitivity must be between 0 and 5
         """
-        if not (0.25 <= value <= 10):
+        if value == '':
+            return
+        if not (0 <= value <= 5):
             self._parameters_dict['atrial_sensitivity'] = ""
-            raise ParameterError('Error: Atrial sensitivity must be in range 0.25mV to 10mV')
+            raise ParameterError('Error: Atrial sensitivity must be in range 0V to 5V')
 
     def _check_ventricular_sensitivity_range(self, value):
         """
-        Ventricular sensitivity must be between 0.25 and 10
+        Ventricular sensitivity must be between 0 and 5
         """
-        if not (0.25 <= value <= 10):
+        if value == '':
+            return
+        if not (0 <= value <= 5):
             self._parameters_dict['ventricular_sensitivity'] = ""
-            raise ParameterError('Error: Ventricular sensitivity must be in range 0.25mV to 10mV')
+            raise ParameterError('Error: Ventricular sensitivity must be in range 0V to 5V')
 
     def _check_pvarp_range(self, value):
         """
