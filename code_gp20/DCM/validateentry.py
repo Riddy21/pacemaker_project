@@ -219,7 +219,6 @@ class ParameterManager(object):
         atrial sensitivity must be a float with increments of 0.5mV
         """
         if value == '':
-            # FIXME: Change based on hardware team's response
             return ''
         try:
             atrial_sens = float("{:.1f}".format(float(value)))
@@ -238,7 +237,6 @@ class ParameterManager(object):
         ventricular sensitivity must be a float with increments of 0.5mV
         """
         if value == '':
-            # FIXME: Change based on hardware team's response
             return ''
         try:
             ventricular_sens = float("{:.1f}".format(float(value)))
@@ -359,9 +357,9 @@ class ParameterManager(object):
         """
         Upper rate limit must be between 50 and 175 ppm
         """
-        if not (30 <= value <= 175):
+        if not (50 <= value <= 175):
             self._parameters_dict['upper_rate_limit'] = ""
-            raise ParameterError('Error: Upper rate limit input must be between 30 - 175 ppm')
+            raise ParameterError('Error: Upper rate limit input must be between 50 - 175 ppm')
 
     def _check_atrial_amplitude_range(self, value):
         """
@@ -522,6 +520,5 @@ class ParameterManager(object):
         if lrl >= url:
             self._parameters_dict['lower_rate_limit'] = ""
             self._parameters_dict['upper_rate_limit'] = ""
-            print(self._parameters_dict)
             raise ParameterError("Error: Lower rate limit must be smaller than the upper rate limit")
 
