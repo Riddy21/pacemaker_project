@@ -130,15 +130,19 @@ class SerialManager(object):
                 #End flag
                 outData.append(b'\x17')
 
+                print("Outdata Built")
+
                 for data in outData:
                     self.serialPort.write(data)
+
+                print("OutData Sent")
 
                 #Wait for confirmation
                 recieved = False
 
                 while(not recieved):
-                    dataIn = self.serialPort.read(  )
-                    if dataIn == (b'\x00001'):
+                    dataIn = self.serialPort.read(17)
+                    if dataIn == (1):
                         return True
                 
 
