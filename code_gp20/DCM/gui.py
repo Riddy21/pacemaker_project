@@ -352,7 +352,7 @@ class GUI(object):
         self._create_dcm_screen()
     
     def _disconnect_device(self):
-        self.serial = None
+        self.serial.serialPort = None
         self._create_dcm_screen()
         
     def _load_user_defaults(self):
