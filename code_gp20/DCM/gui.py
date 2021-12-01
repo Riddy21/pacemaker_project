@@ -1,9 +1,13 @@
 import tkinter as tk
+import sys
+import glob
+import serial.tools.list_ports
 from tkinter.constants import W
-from device import *
 from db import *
 from tkinter import messagebox
 from validateentry import ParameterManager, ParameterError
+from serialcom import SerialManager 
+#from serial import *
 
 VALID_PARAMETERS = {'aoo': ['lower_rate_limit',
                             'upper_rate_limit',
@@ -52,9 +56,6 @@ class GUI(object):
 
         # Default user
         self.user = None
-
-        # Default device
-        self.device = None
         
         #Mode arbitrarily selecting default
         self.mode = ""
@@ -62,6 +63,9 @@ class GUI(object):
         # declare needed buttons and entries
         self.modes_dict = dict()
         self.parameters_dict = dict()
+
+        # Default serial manager
+        self.serial = None
 
     def _on_submit_login(self, username: str, password: str):
         self.user = get_user(username)
@@ -246,7 +250,7 @@ class GUI(object):
         self.modes_dict['vvi'].grid(row=7, column=0, rowspan=2)
 
         # Status
-        if self.device == None or not self.device.connected:
+        if self.serial == None:
             connect_button = tk.Button(self.frame, text='Connect', width=10, height=2, command=lambda: self._setup_device())
             device_connection = tk.Label(self.frame, fg='red', text='Device disconnected')
             device_information = tk.Label(self.frame, fg='red', text='No device data\navailable')
@@ -265,7 +269,7 @@ class GUI(object):
             egram_variable = tk.StringVar(self.frame)
             egram_variable.set(egram_options[0])
             egram_dropdown = tk.OptionMenu(self.frame, egram_variable, *egram_options)
-            egram_button = tk.Button(self.frame, text='View Egram', width=10, height=1, command=lambda: self.device.display_egram(egram_variable.get()))
+            egram_button = tk.Button(self.frame, text='View Egram', width=10, height=1, command=lambda: self.serial.display_egram(egram_variable.get()))
 
             disconnect_button.grid(row=1, column = 3, columnspan=2)
             egram_label.grid(row=3, column=3, columnspan=2)
@@ -284,11 +288,21 @@ class GUI(object):
         self.state = "DCM"
     
     def _setup_device(self):
-        self.device = Device()
+        self.serial = SerialManager()
+
+        available_ports = self.serial._get_ports()
+
+        selectedPort = ""
+
+        while(not(selectedPort in available_ports)):
+            selectedPort = input("Select Port ")
+
+        self.serial._init_serial(selectedPort)
+
         self._create_dcm_screen()
     
     def _disconnect_device(self):
-        self.device = None
+        self.serial = None
         self._create_dcm_screen()
         
     def _load_user_defaults(self):
@@ -326,8 +340,12 @@ class GUI(object):
             messagebox.showerror("Error", 'No operating mode has been selected')
             return
 
-        if self.device == None or not self.device.connected:
+        if self.serial == None:
             messagebox.showerror("Error", "No device connected")
+            return
+        
+        if self.serial.is_plotting_egram():
+            messagebox.showerror("Error", "Exit egram before submitting parameters")
             return
 
         param_manager = ParameterManager(VALID_PARAMETERS[self.mode], self.parameters_dict)
@@ -339,9 +357,11 @@ class GUI(object):
             messagebox.showerror("Error", error)
             return
 
-        update_parameters(self.user['username'], valid_parameters)
-        update_operating_mode(self.user['username'], self.mode)
-        messagebox.showerror("Success", 'Parameters saved and submitted') 
+        success = self.serial._serial_out(valid_parameters, self.parameters_dict, self.mode)
+        if(success):
+            messagebox.showerror("Success", 'Parameters saved and submitted') 
+        else:
+            messagebox.showerror("Error", "Parameters not successfully submitted")
 
     # update entry based on increments when submitting
     def _update_parameter_entries(self, valid_parameters):
