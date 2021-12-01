@@ -122,8 +122,8 @@ class ParameterManager(object):
         """
         try:
             aa = float("{:.1f}".format(float(value)))
-            if (3.5 <= aa <= 7.0):
-                aa = round(2 * aa) / 2.0
+            ##if (3.5 <= aa <= 7.0):
+            ##    aa = round(2 * aa) / 2.0
             return aa
         except ValueError:
             self._parameters_dict['atrial_amplitude'] = ""
@@ -134,7 +134,8 @@ class ParameterManager(object):
         Atrial pw must be float incremented by 0.1ms
         """
         try:
-            apw = float("{:.1f}".format(float(value)))
+            #apw = float("{:.1f}".format(float(value)))
+            apw = int(value)
             return apw
         except ValueError:
             self._parameters_dict['atrial_pw'] = ""
@@ -146,8 +147,8 @@ class ParameterManager(object):
         """
         try:
             va = float("{:.1f}".format(float(value)))
-            if (3.5 <= va <= 7.0):
-                va = round(2 * va) / 2.0
+            #if (3.5 <= va <= 7.0):
+            #    va = round(2 * va) / 2.0
             return va
         except ValueError:
             self._parameters_dict['ventricular_amplitude'] = ""
@@ -155,10 +156,11 @@ class ParameterManager(object):
 
     def _convert_ventricular_pw_value(self, value):
         """
-        Ventricular pulse width must be float incremented by 0.1ms
+        Ventricular pulse width must be float incremented by 1ms
         """
         try:
-            vpw = float("{:.1f}".format(float(value)))
+            #vpw = float("{:.1f}".format(float(value)))
+            vpw = int(value)
             return vpw
         except ValueError:
             self._parameters_dict['ventricular_pw'] = ""
@@ -187,6 +189,150 @@ class ParameterManager(object):
         except ValueError:
             self._parameters_dict['arp'] = ""
             raise ParameterError('Error: ARP input must be a number')
+
+    def _convert_max_sensor_rate_value(self, value):
+        """
+        max sensor rate must be a integer with 5 ppm increments
+        """
+        try:
+            max_sensor_rate = float(value)
+            max_sensor_rate = int(5 * round(max_sensor_rate/5))
+            return max_sensor_rate
+        except ValueError:
+            self._parameters_dict['max_sensor_rate'] = ""
+            raise ParameterError('Error: Max sensor rate must be a number')
+
+    def _convert_fixed_av_delay_value(self, value):
+        """
+        fixed av delay must be integer with increments of 10
+        """
+        try:
+            fixed_av_delay = float(value)
+            fixed_av_delay = int(10 * round(fixed_av_delay/10))
+            return fixed_av_delay
+        except ValueError:
+            self._parameters_dict['fixed_av_delay'] = ""
+            raise ParameterError('Error: Fixed av delay must be a number')
+
+    def _convert_atrial_sensitivity_value(self, value):
+        """
+        atrial sensitivity must be a float with increments of 0.5mV
+        """
+        if value == '':
+            # FIXME: Change based on hardware team's response
+            return ''
+        try:
+            atrial_sens = float("{:.1f}".format(float(value)))
+            #if (0 <= atrial_sens <= 1.0):
+            #    atrial_sens = round(4 * atrial_sens) / 4.0
+            #else:
+            #    atrial_sens = round(2 * atrial_sens) / 2.0
+
+            return atrial_sens
+        except ValueError:
+            self._parameters_dict['atrial_sensitivity'] = ""
+            raise ParameterError('Error: Atrial sensitivity must be a number')
+
+    def _convert_ventricular_sensitivity_value(self, value):
+        """
+        ventricular sensitivity must be a float with increments of 0.5mV
+        """
+        if value == '':
+            # FIXME: Change based on hardware team's response
+            return ''
+        try:
+            ventricular_sens = float("{:.1f}".format(float(value)))
+            #if (0 <= ventricular_sens <= 1.0):
+            #    ventricular_sens = round(4 * ventricular_sens) / 4.0
+            #else:
+            #    ventricular_sens = round(2 * ventricular_sens) / 2.0
+
+            return ventricular_sens
+        except ValueError:
+            self._parameters_dict['ventricular_sensitivity'] = ""
+            raise ParameterError('Error: Ventricular sensitivity must be a number')
+
+    def _convert_pvarp_value(self, value):
+        """
+        PVARP must be an integer with 10 ms increments
+        """
+        try:
+            pvarp = float(value)
+            pvarp = int(10 * round(pvarp/10))
+            return pvarp
+        except ValueError:
+            self._parameters_dict['pvarp'] = ""
+            raise ParameterError('Error: PVARP must be a number')
+
+    def _convert_hysteresis_value(self, value):
+        """
+        Hysteresis must be an integer with increments of 1 or 5
+        """
+        try:
+            hysteresis = float(value)
+            if 50 <= hysteresis <= 90:
+                hysteresis = int(round(hysteresis))
+            else:
+                hysteresis = int(5 * round(hysteresis/5))
+            return hysteresis
+        except ValueError:
+            self._parameters_dict['hysteresis'] = ""
+            raise ParameterError('Error: Hysteresis input must be a number')
+
+    def _convert_rate_smoothing_value(self, value):
+        """
+        Rate smoothing must be an integer with multiple of 3
+        """
+        try:
+            rate_smoothing = float(value)
+            rate_smoothing = int(3*round(rate_smoothing/3))
+            if rate_smoothing == 24:
+                rate_smoothing = 25
+            return rate_smoothing
+        except ValueError:
+            self._parameters_dict['rate_smoothing'] = ""
+            raise ParameterError('Error: Rate smoothing input must be a number')
+
+    def _convert_activity_threshold_value(self, value):
+        """
+        Activity threshold must be a string value
+        """
+        # No need for checking because it is a dropdown and cannot have errors
+        return value
+
+    def _convert_reaction_time_value(self, value):
+        """
+        Reaction time must be an integer with 10 increments
+        """
+        try:
+            reaction_time = float(value)
+            reaction_time = int(10 * round(reaction_time/10))
+            return reaction_time
+        except ValueError:
+            self._parameters_dict['reaction_time'] = ""
+            raise ParameterError('Error: Reaction time must be a number')
+
+    def _convert_response_factor_value(self, value):
+        """
+        Response factor must be an integer from 1 - 16
+        """
+        try:
+            response_factor = int(round(float(value)))
+            return response_factor
+        except ValueError:
+            self._parameters_dict['response_factor'] = ""
+            raise ParameterError('Error: Response factor must be a number')
+
+    def _convert_recovery_time_value(self, value):
+        """
+        Recovery time must be an integer from 2-16
+        """
+        try:
+            recovery_time = int(round(float(value)))
+            return recovery_time
+        except ValueError:
+            self._parameters_dict['recovery_time'] = ""
+            raise ParameterError('Error: Recovery time must be a number')
 
     #-----------------------------------------------------------
     # Range Checks
@@ -219,35 +365,35 @@ class ParameterManager(object):
 
     def _check_atrial_amplitude_range(self, value):
         """
-        Atrial amplitude range must be in ranges 0, 0.5-3.2, 3.5-7
+        Atrial amplitude range must be in ranges 0-5.0
         """
-        if value != 0 and not (0.5 <= value <= 3.2) and not (3.5 <= value <= 7):
+        if not (0 <= value <= 5.0):
             self._parameters_dict['atrial_amplitude'] = ""
-            raise ParameterError('Error: Atrial amplitude must be in ranges 0, 0.5-3.2, 3.5-7 V')
+            raise ParameterError('Error: Atrial amplitude must be in ranges 0V - 5V')
 
     def _check_atrial_pw_range(self, value):
         """
-        Atrial pw must be 0.05 or 0.1 - 1.9 ms
+        Atrial pw must be 1-30
         """
-        if value != 0.05 and not (0.1 <= value <= 1.9):
+        if not (1 <= value <= 30):
             self._parameters_dict['atrial_pw'] = ""
-            raise ParameterError('Error: Atrial pulse width must be 0.05ms or in range 0.1ms-1.9ms')
+            raise ParameterError('Error: Atrial pulse width must be 1ms - 30ms')
 
     def _check_ventricular_amplitude_range(self, value):
         """
-        Ventricular amplitude range must be in ranges 0, 0.5-3.2, 3.5-7
+        Ventricular amplitude range must be in ranges 0-5.0
         """
-        if value != 0 and not (0.5 <= value <= 3.2) and not (3.5 <= value <= 7):
+        if not (0 <= value <= 5.0):
             self._parameters_dict['ventricular_amplitude'] = ""
-            raise ParameterError('Error: Ventricular amplitude must be in ranges 0, 0.5-3.2, 3.5-7 V')
+            raise ParameterError('Error: Ventricular amplitude must be in ranges 0V - 5V')
 
     def _check_ventricular_pw_range(self, value):
         """
-        Ventricular pw must be 0.05 or 0.1 - 1.9 ms
+        Ventricular pw must be 1-30
         """
-        if value != 0.05 and not (0.1 <= value <= 1.9):
+        if not (1 <= value <= 30):
             self._parameters_dict['ventricular_pw'] = ""
-            raise ParameterError('Error: Ventricular pulse width must be 0.05ms or in range 0.1ms-1.9ms')
+            raise ParameterError('Error: Ventricular pulse width must be 1ms - 30ms')
 
     def _check_vrp_range(self, value):
         """
@@ -264,6 +410,98 @@ class ParameterManager(object):
             self._parameters_dict['arp'] = ""
             raise ParameterError('Error: Atrial refactory period must be in range 150ms - 500ms')
 
+    def _check_max_sensor_rate_range(self, value):
+        """
+        Max sensor rate must be between 50-175
+        """
+        if not (50 <= value <= 175):
+            self._parameters_dict['max_sensor_rate'] = ""
+            raise ParameterError('Error: Max sensor rate must be in range 50ppm - 175ppm')
+
+    def _check_fixed_av_delay_range(self, value):
+        """
+        Fixed av delay must be betwee 70-300
+        """
+        if not (70 <= value <= 300):
+            self._parameters_dict['fixed_av_delay'] = ""
+            raise ParameterError('Error: Fixed AV delay must be in range 70ms - 300ms')
+
+    def _check_atrial_sensitivity_range(self, value):
+        """
+        Atrial sensitivity must be between 0 and 5
+        """
+        if value == '':
+            return
+        if not (0 <= value <= 5):
+            self._parameters_dict['atrial_sensitivity'] = ""
+            raise ParameterError('Error: Atrial sensitivity must be in range 0V to 5V')
+
+    def _check_ventricular_sensitivity_range(self, value):
+        """
+        Ventricular sensitivity must be between 0 and 5
+        """
+        if value == '':
+            return
+        if not (0 <= value <= 5):
+            self._parameters_dict['ventricular_sensitivity'] = ""
+            raise ParameterError('Error: Ventricular sensitivity must be in range 0V to 5V')
+
+    def _check_pvarp_range(self, value):
+        """
+        PVARP must be between 150-500
+        """
+        if not (150 <= value <= 500):
+            self._parameters_dict['pvarp'] = ""
+            raise ParameterError('Error: PVARP must be in range 150ms - 500ms')
+
+    def _check_hysteresis_range(self, value):
+        """
+        Hysteresis must be 0 or 30 - 175
+        """
+        if not (value == 0) and not (30 <= value <= 175):
+            self._parameters_dict['hysteresis'] = ""
+            raise ParameterError('Error: Hysteresis range must be 0 or between 30ppm - 175ppm')
+
+    def _check_activity_threshold_range(self, value):
+        """
+        Must be one of the valid settings
+        """
+        if value not in ['V-Low', 'Low', 'Med-Low', 'Med', 'Med-High', 'High', 'V-High']:
+            self._parameters_dict['activity_threshold'] = ""
+            raise ParameterError('Error: Activity threshold must be one of the following settings: \
+                                  V-Low, Low, Med-Low, Med, Med-High, High, V-High')
+
+    def _check_rate_smoothing_range(self, value):
+        """
+        Rate smoothing must be between 0 - 25%
+        """
+        if not (0 <= value <= 25):
+            self._parameters_dcit['rate_smoothing'] = ""
+            raise ParameterError('Error: Rate smoothing must be in range 0% - 25%')
+
+    def _check_reaction_time_range(self, value):
+        """
+        Reaction time must be between 10 - 50
+        """
+        if not (10 <= value <= 50):
+            self._parameters_dict['reaction_time'] = ""
+            raise ParameterError('Error: Reaction time must be in range 10 sec - 50 sec')
+
+    def _check_response_factor_range(self, value):
+        """
+        Response factor must be between 1-16
+        """
+        if not (1 <= value <= 16):
+            self._parameters_dict['response_factor'] = ""
+            raise ParameterError('Error: Response factor must be in range 1 - 16')
+        
+    def _check_recovery_time_range(self, value):
+        """
+        Recovery time must be between 2-16 min
+        """
+        if not (2 <= value <= 16):
+            self._parameters_dict['recovery_time'] = ""
+            raise ParameterError('Error: Recovery factor must be in range 2min - 16min')
     #-----------------------------------------------------------
     # Cross Checks
     #-----------------------------------------------------------

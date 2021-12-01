@@ -11,12 +11,23 @@ def create_user(username: str, password: str):
                    'parameters': {
                        'lower_rate_limit': 60,
                         'upper_rate_limit': 120,
-                        'atrial_amplitude': 3.5,
-                        'atrial_pw': 0.4,
-                        'ventricular_amplitude': 3.5,
-                        'ventricular_pw': 0.4,
+                        'max_sensor_rate': 120,
+                        'fixed_av_delay': 150,
+                        'atrial_amplitude': 5,
+                        'atrial_pw': 1,
+                        'atrial_sensitivity': '',
+                        'ventricular_amplitude': 5,
+                        'ventricular_pw': 1,
+                        'ventricular_sensitivity': '',
                         'vrp': 320,
                         'arp': 250,
+                        'pvarp': 250,
+                        'hysteresis': 0,
+                        'rate_smoothing': 0,
+                        'activity_threshold': 'Med',
+                        'reaction_time': 30,
+                        'response_factor': 8,
+                        'recovery_time': 5
                    },
                    'operating_mode': ''})
         return True
