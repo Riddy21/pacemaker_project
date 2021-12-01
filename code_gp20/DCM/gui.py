@@ -1,4 +1,5 @@
 import tkinter as tk
+import tkinter.ttk as ttk
 from tkinter.constants import W
 from device import *
 from db import *
@@ -158,7 +159,7 @@ class GUI(object):
         self.frame = tk.Frame(self.window)
 
         # Resize window
-        self.window.minsize(800, 450)
+        self.window.minsize(900, 900)
 
         # Parameters
         parameter_label = tk.Label(self.frame, text='DCM Parameters', pady=15)
@@ -175,8 +176,8 @@ class GUI(object):
         vrp = tk.Label(self.frame, text='VRP (ms)', pady=10)#VVI
         arp = tk.Label(self.frame, text='ARP (ms)', pady=10)#AAI
         pvarp = tk.Label(self.frame, text='PVARP (ms)', pady=10)
-        hysteresis = tk.Label(self.frame, text='Hysteresis rate limit', pady=10)
-        rate_smoothing = tk.Label(self.frame, text='Rate Smoothing (%)', pady=10)
+        hysteresis = tk.Label(self.frame, text='Hysteresis rate limit (ppm) (Set to 0 if Off)', pady=10)
+        rate_smoothing = tk.Label(self.frame, text='Rate Smoothing (%) (Set to 0 if Off)', pady=10)
         activity_threshold = tk.Label(self.frame, text='Activity threshold', pady=10)
         reaction_time = tk.Label(self.frame, text='Reaction Time (sec)', pady=10)
         response_factor = tk.Label(self.frame, text='Response Factor', pady=10)
@@ -202,8 +203,8 @@ class GUI(object):
         self.parameters_dict['arp'] = tk.Entry(self.frame) #AAI
         self.parameters_dict['pvarp'] = tk.Entry(self.frame)
         self.parameters_dict['hysteresis'] = tk.Entry(self.frame)
-        self.parameters_dict['rate_smoothing'] = tk.Radiobutton(self.frame, text=rate_smoothing_options)
-        self.parameters_dict['activity_threshold'] = tk.Radiobutton(self.frame, text=activity_threshold_options)
+        self.parameters_dict['rate_smoothing'] = tk.Entry(self.frame)
+        self.parameters_dict['activity_threshold'] = ttk.Combobox(self.frame, value=activity_threshold_options)
         self.parameters_dict['reaction_time'] = tk.Entry(self.frame)
         self.parameters_dict['response_factor'] = tk.Entry(self.frame)
         self.parameters_dict['recovery_time'] = tk.Entry(self.frame)
@@ -214,7 +215,13 @@ class GUI(object):
         self.modes_dict['voo'] = tk.Button(self.frame, text='VOO', width=10, height=5, command=lambda: self._set_mode('voo'))
         self.modes_dict['aai'] = tk.Button(self.frame, text='AAI', width=10, height=5, command=lambda: self._set_mode('aai'))
         self.modes_dict['vvi'] = tk.Button(self.frame, text='VVI', width=10, height=5, command=lambda: self._set_mode('vvi'))
-        
+        self.modes_dict['doo'] = tk.Button(self.frame, text='DOO', width=10, height=5, command=lambda: self._set_mode('doo'))
+        self.modes_dict['aoor'] = tk.Button(self.frame, text='AOOR', width=10, height=5, command=lambda: self._set_mode('aoor'))
+        self.modes_dict['voor'] = tk.Button(self.frame, text='VOOR', width=10, height=5, command=lambda: self._set_mode('voor'))
+        self.modes_dict['aair'] = tk.Button(self.frame, text='AAIR', width=10, height=5, command=lambda: self._set_mode('aair'))
+        self.modes_dict['vvir'] = tk.Button(self.frame, text='VVIR', width=10, height=5, command=lambda: self._set_mode('vvir'))
+        self.modes_dict['door'] = tk.Button(self.frame, text='DOOR', width=10, height=5, command=lambda: self._set_mode('door'))
+
         # Status
         status_label = tk.Label(self.frame, text='Status', pady=15)
 
@@ -233,27 +240,56 @@ class GUI(object):
         # Parameter button locations
         lower_rate_limit.grid(row=1, column=1)
         upper_rate_limit.grid(row=2, column=1)
-        atrial_amplitude.grid(row=3, column=1)
-        atrial_pw.grid(row=4, column=1)
-        ventricular_amplitude.grid(row=5, column=1)
-        ventricular_pw.grid(row=6, column=1)
-        vrp.grid(row=7, column=1)
-        arp.grid(row=8, column=1)
+        max_sensor_rate.grid(row=3, column=1)
+        fixed_av_delay.grid(row=4, column=1)
+        atrial_amplitude.grid(row=5, column=1)
+        atrial_pw.grid(row=6, column=1)
+        atrial_sensitivity.grid(row=7, column=1)
+        ventricular_amplitude.grid(row=8, column=1)
+        ventricular_pw.grid(row=9, column=1)
+        ventricular_sensitivity.grid(row=10, column=1)
+        vrp.grid(row=11, column=1)
+        arp.grid(row=12, column=1)
+        pvarp.grid(row=13, column=1)
+        hysteresis.grid(row=14, column=1)
+        rate_smoothing.grid(row=15, column=1)
+        activity_threshold.grid(row=16, column=1)
+        reaction_time.grid(row=17, column=1)
+        response_factor.grid(row=18, column=1)
+        recovery_time.grid(row=19, column=1)
 
         self.parameters_dict['lower_rate_limit'].grid(row=1, column=2)
         self.parameters_dict['upper_rate_limit'].grid(row=2, column=2)
-        self.parameters_dict['atrial_amplitude'].grid(row=3, column=2)
-        self.parameters_dict['atrial_pw'].grid(row=4, column=2)
-        self.parameters_dict['ventricular_amplitude'].grid(row=5, column=2)
-        self.parameters_dict['ventricular_pw'].grid(row=6, column=2)
-        self.parameters_dict['vrp'].grid(row=7, column=2)
-        self.parameters_dict['arp'].grid(row=8, column=2)
+        self.parameters_dict['max_sensor_rate'].grid(row=3, column=2)
+        self.parameters_dict['fixed_av_delay'].grid(row=4, column=2)
+        self.parameters_dict['atrial_amplitude'].grid(row=5, column=2)
+        self.parameters_dict['atrial_pw'].grid(row=6, column=2)
+        self.parameters_dict['atrial_sensitivity'].grid(row=7, column=2)
+        self.parameters_dict['ventricular_amplitude'].grid(row=8, column=2)
+        self.parameters_dict['ventricular_pw'].grid(row=9, column=2)
+        self.parameters_dict['ventricular_sensitivity'].grid(row=10, column=2)
+        self.parameters_dict['vrp'].grid(row=11, column=2)
+        self.parameters_dict['arp'].grid(row=12, column=2)
+        self.parameters_dict['pvarp'].grid(row=13, column=2)
+        self.parameters_dict['hysteresis'].grid(row=14, column=2)
+        self.parameters_dict['rate_smoothing'].grid(row=15, column=2)
+        self.parameters_dict['activity_threshold'].grid(row=16, column=2)
+        self.parameters_dict['reaction_time'].grid(row=17, column=2)
+        self.parameters_dict['response_factor'].grid(row=18, column=2)
+        self.parameters_dict['recovery_time'].grid(row=19, column=2)
 
         # Operating mode buttons
+        # TODO: add new operating modes
         self.modes_dict['aoo'].grid(row=1, column=0, rowspan=2)
         self.modes_dict['voo'].grid(row=3, column=0, rowspan=2)
         self.modes_dict['aai'].grid(row=5, column=0, rowspan=2)
         self.modes_dict['vvi'].grid(row=7, column=0, rowspan=2)
+        self.modes_dict['doo'].grid(row=9, column=0, rowspan=2)
+        self.modes_dict['aoor'].grid(row=11, column=0, rowspan=2)
+        self.modes_dict['voor'].grid(row=13, column=0, rowspan=2)
+        self.modes_dict['aair'].grid(row=15, column=0, rowspan=2)
+        self.modes_dict['vvir'].grid(row=17, column=0, rowspan=2)
+        self.modes_dict['door'].grid(row=19, column=0, rowspan=2)
 
         # Status
         if self.device == None or not self.device.connected:
@@ -286,8 +322,8 @@ class GUI(object):
         submit_button.grid(row=7, column=3, rowspan=2, columnspan=2)
 
         # exit buttons
-        logout_button.grid(row=10, column=1)
-        close_button.grid(row=10, column=3)
+        logout_button.grid(row=20, column=1)
+        close_button.grid(row=20, column=3)
 
         self.frame.pack()
 
@@ -305,12 +341,12 @@ class GUI(object):
         # get the right state
         self._set_mode(self.user['operating_mode'])
 
-        for parameter, entry in self.parameters_dict.items():
-            prev_state = entry['state']
-            entry['state'] = 'normal'
-            entry.delete(0, tk.END)
-            entry.insert(0, self.user['parameters'][parameter])
-            entry['state'] = prev_state
+        for parameter, field in self.parameters_dict.items():
+            prev_state = field['state']
+            field['state'] = 'normal'
+            field.delete(0, tk.END)
+            field.insert(0, self.user['parameters'][parameter])
+            field['state'] = prev_state
 
     def _set_mode(self, input_mode):
         if input_mode == '':
