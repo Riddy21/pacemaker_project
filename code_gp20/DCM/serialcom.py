@@ -154,7 +154,9 @@ class SerialManager(object):
     
     def display_egram(self, mode):
         try:
-            self.serialPort.write(1) # Request data from pacemaker based on egram-plotting mode
+            self.serialPort.write(b'\x16') # Signals to pacemaker to start receiving signal
+            for i in range(58):
+                self.serialPort.write(b'\x26') # Signal to pacemaker to send egram data
         except:
             messagebox.showerror("Error",'Unable to request egram data from pacemaker')
             return
@@ -180,12 +182,13 @@ class SerialManager(object):
         y = [0]*len(x)
         data = []
         while self.continue_plotting:
-            read = self.serialPort.read(16)
+            print('Reading data...')
+            read = self.serialPort.read(17)
             if (mode == 'Atrium'):
-                reconstruct = struct.unpack('d', read[:8])
+                reconstruct = struct.unpack('d', read[1:9])
                 y[-1] = reconstruct[0]
             elif (mode == 'Ventricle'):
-                reconstruct = struct.unpack('d', read[8:])
+                reconstruct = struct.unpack('d', read[9:])
                 y[-1] = reconstruct[0]
             data = self._plot(x, y, data, ax, mode) # updates data
             y = np.append(y[1:],0.0)
@@ -213,9 +216,9 @@ class SerialManager(object):
         data_v = []
 
         while self.continue_plotting:
-            read = self.serialPort.read(16)
-            reconstruct_a = struct.unpack('d', read[:8])
-            reconstruct_v = struct.unpack('d', read[8:])
+            read = self.serialPort.read(17)
+            reconstruct_a = struct.unpack('d', read[1:9])
+            reconstruct_v = struct.unpack('d', read[9:])
             y_a[-1] = reconstruct_a[0]
             y_v[-1] = reconstruct_v[0]
             data_a = self._plot(x_a, y_a, data_a, ax_a, 'Atrium') # updates data for atrium
@@ -225,8 +228,9 @@ class SerialManager(object):
             fig.canvas.mpl_connect('close_event', self._on_close)
     
     def _on_close(self, event):
-        self.serialPort.write(2) # Stop command to pacemaker
         self.continue_plotting = False
+        for i in range(59):
+                self.serialPort.write(2) # 59 2s signal to pacemaker to stop egram data
 
     def _plot(self, x, y, data, ax, mode):
         if data==[]:
