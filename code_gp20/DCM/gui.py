@@ -349,7 +349,7 @@ class GUI(object):
         self._create_dcm_screen()
 
     def _refresh_devices(self):
-        self.serial = SerialManager()
+        self._create_dcm_screen()
     
     def _disconnect_device(self):
         self.serial = None
