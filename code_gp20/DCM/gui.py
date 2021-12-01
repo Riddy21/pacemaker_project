@@ -340,7 +340,7 @@ class GUI(object):
 
         available_ports = self.serial._get_ports()
 
-        selectedPort = available_ports[self.port_selection.get()]
+        selectedPort = self.port_selection.get()
 
         self.serial._init_serial(selectedPort)
 
