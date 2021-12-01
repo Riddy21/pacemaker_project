@@ -5,6 +5,7 @@ import serial.tools.list_ports
 import matplotlib.pyplot as plt
 import numpy as np
 import struct
+from tkinter import messagebox
 
 ACTIVITY_THRESHOLD = {
     'V-Low': 1,
@@ -49,7 +50,7 @@ class SerialManager(object):
             print(self.serialPort.name)
 
         except:
-            print("Unable to establish serial connection")
+            messagebox.showerror("Error","Unable to establish serial connection")
 
     def _serial_out(self, valid_parameters, parameters_dict, operating_mode):
 
@@ -142,7 +143,7 @@ class SerialManager(object):
                 
 
         except:
-            print("Unable to send data")
+            messagebox.showerror("Error","Unable to send data")
 
 
         #Verify data
@@ -155,7 +156,7 @@ class SerialManager(object):
         try:
             self.serialPort.write(1) # Request data from pacemaker based on egram-plotting mode
         except:
-            print('Unable to request egram data from pacemaker')
+            messagebox.showerror("Error",'Unable to request egram data from pacemaker')
             return
 
         self.continue_plotting = True
@@ -165,7 +166,7 @@ class SerialManager(object):
             elif (mode == 'Both'):
                 self._create_double_plot()
         except:
-            print('Unable to receive egram data from pacemaker')
+            messagebox.showerror("Error",'Unable to receive egram data from pacemaker')
             return
     
     def _create_single_plot(self, mode):
