@@ -72,10 +72,10 @@ class SerialManager(object):
         if(self.serialPort.is_open):
 
             #Start Flag
-            self.serialPort.write(b'\x16')
+            self.serialPort.write(np.uint8(16))
             print("wrote start flag")
 
-            #New write parameters
+            #operating mode uint8
             self.serialPort.write(np.uint8(OPERATING_MODE[operating_mode]))
             print("wrote operating mode")
             #atrial amp     double
@@ -142,7 +142,7 @@ class SerialManager(object):
             print("wrote parameters")
 
             #End flag
-            self.serialPort.write(b'\x17')
+            self.serialPort.write(np.uint8(17))
 
             print("wrote end flag")
 
@@ -155,6 +155,10 @@ class SerialManager(object):
                 return True
             else:
                 return False
+
+        else:
+            messagebox.showerror("Error","Serial Connection not Established")
+            return False
 
 
         #Verify data
