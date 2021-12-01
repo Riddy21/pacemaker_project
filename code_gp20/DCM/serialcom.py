@@ -73,9 +73,11 @@ class SerialManager(object):
 
             #Start Flag
             self.serialPort.write(b'\x16')
+            print("wrote start flag")
 
             #New write parameters
             self.serialPort.write(np.uint8(OPERATING_MODE[operating_mode]))
+            print("wrote operating mode")
             #atrial amp     double
             if('atrial_amplitude' in valid_parameters[operating_mode]):
                 self.serialPort.write(np.double(parameters_dict['atrial_amplitude']))
@@ -137,13 +139,19 @@ class SerialManager(object):
             else:
                 self.serialPort.write(np.uint16(0))
             
+            print("wrote parameters")
+
             #End flag
             self.serialPort.write(b'\x17')
+
+            print("wrote end flag")
 
             #Wait for confirmation
             recieved = self.serialPort.read(17)
 
-            if recieved == (1):
+            print("recieved confirmation")
+
+            if recieved == 1:
                 return True
             else:
                 return False
