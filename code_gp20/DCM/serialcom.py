@@ -72,8 +72,8 @@ class SerialManager(object):
         if(self.serialPort.is_open):
 
             #Start Flag
-            self.serialPort.write(np.uint8(16))
-            print(np.uint8(16))
+            self.serialPort.write(b'\x16')
+            print(b'\x16')
             print("wrote start flag")
 
             #operating mode uint8
@@ -180,16 +180,16 @@ class SerialManager(object):
             print("wrote parameters")
 
             #End flag
-            self.serialPort.write(np.uint8(17))
-            print(np.uint8(0))
+            self.serialPort.write(b'\x17')
+            print(np.uint8(b'\x17'))
             print("wrote end flag")
 
             #Wait for confirmation
-            recieved = self.serialPort.read(17)
+            recieved = self.serialPort.read(1)
 
             print("recieved confirmation")
 
-            if recieved == 1:
+            if recieved == b'\x18':
                 return True
             else:
                 return False
