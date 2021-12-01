@@ -164,7 +164,7 @@ class GUI(object):
         self.frame = tk.Frame(self.window)
 
         # Resize window
-        self.window.minsize(900, 900)
+        self.window.minsize(900, 750)
 
         # Parameters
         parameter_label = tk.Label(self.frame, text='DCM Parameters', pady=15)

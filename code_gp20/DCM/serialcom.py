@@ -17,6 +17,19 @@ ACTIVITY_THRESHOLD = {
     'V-High': 7
 }
 
+OPERATING_MODE = {
+    'aoo': 1,
+    'voo': 2,
+    'aai': 3,
+    'vvi': 4,
+    'doo': 5,
+    'aoor': 6,
+    'voor': 7,
+    'aair': 8,
+    'vvir': 9,
+    'door': 10
+}
+
 plt.style.use('ggplot')
 
 #Hardcoded Baud Rate
@@ -65,7 +78,7 @@ class SerialManager(object):
                 outData.append(b'\x16')
 
                 #New write parameters
-                outData.append[parameters_dict.get('operating_mode')]
+                outData.append(OPERATING_MODE.get(parameters_dict.get('operating_mode')))
                 #atrial amp     double
                 if('atrial_amplitude' in valid_parameters[operating_mode]):
                     outData.append(np.double(parameters_dict.get('atrial_amplitude')))
