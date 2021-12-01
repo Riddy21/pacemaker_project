@@ -299,14 +299,16 @@ class GUI(object):
         # Status
         if not self.serial.serialPort:
             connect_button = tk.Button(self.frame, text='Connect', width=10, height=2, command=lambda: self._setup_device())
+            refresh_button = tk.Button(self.frame, text='Refresh', width=10, height=2, command=lambda: self._refresh_devices())
             self.port_selection = ttk.Combobox(self.frame, value=self.serial._get_ports())
             device_connection = tk.Label(self.frame, fg='red', text='Device disconnected')
             device_information = tk.Label(self.frame, fg='red', text='No device data\navailable')
 
             connect_button.grid(row=1, column = 3, columnspan=2)
-            self.port_selection.grid(row=2, column = 3, columnspan=2)
-            device_connection.grid(row=3, column=3, columnspan=2)
-            device_information.grid(row=4, column=3, columnspan=2)
+            refresh_button.grid(row=2, column = 3, columnspan=2)
+            self.port_selection.grid(row=3, column = 3, columnspan=2)
+            device_connection.grid(row=4, column=3, columnspan=2)
+            device_information.grid(row=5, column=3, columnspan=2)
         else:
             disconnect_button = tk.Button(self.frame, text='Disconnect', width=10, height=2, command=lambda: self._disconnect_device())
             egram_label = tk.Label(self.frame, text='Electrogram')
@@ -344,6 +346,9 @@ class GUI(object):
 
         self.serial._init_serial(selectedPort)
 
+        self._create_dcm_screen()
+
+    def _refresh_devices(self):
         self._create_dcm_screen()
     
     def _disconnect_device(self):
