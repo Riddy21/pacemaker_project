@@ -168,25 +168,25 @@ class GUI(object):
 
         # Parameters
         parameter_label = tk.Label(self.frame, text='DCM Parameters', pady=15)
-        lower_rate_limit = tk.Label(self.frame, text='Lower rate limit (ppm)', pady=10) #all
-        upper_rate_limit = tk.Label(self.frame, text='Upper rate limit (ppm)', pady=10)#all
-        max_sensor_rate = tk.Label(self.frame, text='Maximum sensor rate (ppm)', pady=10)
-        fixed_av_delay = tk.Label(self.frame, text='Fixed AV delay (ms)', pady=10)
-        atrial_amplitude = tk.Label(self.frame, text='Atrial amplitude (V)', pady=10)#AOO, AAI
-        atrial_pw = tk.Label(self.frame, text='Atrial pulse width (ms)', pady=10)#AAO, AAI
-        atrial_sensitivity = tk.Label(self.frame, text='Atrial sensitivity (V)', pady=10)
-        ventricular_amplitude = tk.Label(self.frame, text='Ventricular Amplitude (V)', pady=10)#VOO, VVI
-        ventricular_pw = tk.Label(self.frame, text='Ventricular pulse width (ms)', pady=10)#VOO, VVI
-        ventricular_sensitivity = tk.Label(self.frame, text='Ventricular sensitivity (V)', pady=10)
-        vrp = tk.Label(self.frame, text='VRP (ms)', pady=10)#VVI
-        arp = tk.Label(self.frame, text='ARP (ms)', pady=10)#AAI
-        pvarp = tk.Label(self.frame, text='PVARP (ms)', pady=10)
-        hysteresis = tk.Label(self.frame, text='Hysteresis rate limit (ppm) (Set to 0 if Off)', pady=10)
-        rate_smoothing = tk.Label(self.frame, text='Rate Smoothing (%) (Set to 0 if Off)', pady=10)
-        activity_threshold = tk.Label(self.frame, text='Activity threshold', pady=10)
-        reaction_time = tk.Label(self.frame, text='Reaction Time (sec)', pady=10)
-        response_factor = tk.Label(self.frame, text='Response Factor', pady=10)
-        recovery_time = tk.Label(self.frame, text='Recovery Time (min)', pady=10)
+        lower_rate_limit = tk.Label(self.frame, text='Lower rate limit (ppm)', pady=5) #all
+        upper_rate_limit = tk.Label(self.frame, text='Upper rate limit (ppm)', pady=5)#all
+        max_sensor_rate = tk.Label(self.frame, text='Maximum sensor rate (ppm)', pady=5)
+        fixed_av_delay = tk.Label(self.frame, text='Fixed AV delay (ms)', pady=5)
+        atrial_amplitude = tk.Label(self.frame, text='Atrial amplitude (V)', pady=5)#AOO, AAI
+        atrial_pw = tk.Label(self.frame, text='Atrial pulse width (ms)', pady=5)#AAO, AAI
+        atrial_sensitivity = tk.Label(self.frame, text='Atrial sensitivity (V)', pady=5)
+        ventricular_amplitude = tk.Label(self.frame, text='Ventricular Amplitude (V)', pady=5)#VOO, VVI
+        ventricular_pw = tk.Label(self.frame, text='Ventricular pulse width (ms)', pady=5)#VOO, VVI
+        ventricular_sensitivity = tk.Label(self.frame, text='Ventricular sensitivity (V)', pady=5)
+        vrp = tk.Label(self.frame, text='VRP (ms)', pady=5)#VVI
+        arp = tk.Label(self.frame, text='ARP (ms)', pady=5)#AAI
+        pvarp = tk.Label(self.frame, text='PVARP (ms)', pady=5)
+        hysteresis = tk.Label(self.frame, text='Hysteresis rate limit (ppm) (Set to 0 if Off)', pady=5)
+        rate_smoothing = tk.Label(self.frame, text='Rate Smoothing (%) (Set to 0 if Off)', pady=5)
+        activity_threshold = tk.Label(self.frame, text='Activity threshold', pady=5)
+        reaction_time = tk.Label(self.frame, text='Reaction Time (sec)', pady=5)
+        response_factor = tk.Label(self.frame, text='Response Factor', pady=5)
+        recovery_time = tk.Label(self.frame, text='Recovery Time (min)', pady=5)
 
         # FIXME: Think of way to have radio button for Hysteresis implemented
         # FIXME: Find way to implement activity threshold correctly
@@ -216,16 +216,16 @@ class GUI(object):
 
         # Operating modes
         modes_label = tk.Label(self.frame, text='Operating Modes', pady=15)
-        self.modes_dict['aoo'] = tk.Button(self.frame, text='AOO', width=10, height=5, command=lambda: self._set_mode('aoo'))
-        self.modes_dict['voo'] = tk.Button(self.frame, text='VOO', width=10, height=5, command=lambda: self._set_mode('voo'))
-        self.modes_dict['aai'] = tk.Button(self.frame, text='AAI', width=10, height=5, command=lambda: self._set_mode('aai'))
-        self.modes_dict['vvi'] = tk.Button(self.frame, text='VVI', width=10, height=5, command=lambda: self._set_mode('vvi'))
-        self.modes_dict['doo'] = tk.Button(self.frame, text='DOO', width=10, height=5, command=lambda: self._set_mode('doo'))
-        self.modes_dict['aoor'] = tk.Button(self.frame, text='AOOR', width=10, height=5, command=lambda: self._set_mode('aoor'))
-        self.modes_dict['voor'] = tk.Button(self.frame, text='VOOR', width=10, height=5, command=lambda: self._set_mode('voor'))
-        self.modes_dict['aair'] = tk.Button(self.frame, text='AAIR', width=10, height=5, command=lambda: self._set_mode('aair'))
-        self.modes_dict['vvir'] = tk.Button(self.frame, text='VVIR', width=10, height=5, command=lambda: self._set_mode('vvir'))
-        self.modes_dict['door'] = tk.Button(self.frame, text='DOOR', width=10, height=5, command=lambda: self._set_mode('door'))
+        self.modes_dict['aoo'] = tk.Button(self.frame, text='AOO', width=10, command=lambda: self._set_mode('aoo'))
+        self.modes_dict['voo'] = tk.Button(self.frame, text='VOO', width=10, command=lambda: self._set_mode('voo'))
+        self.modes_dict['aai'] = tk.Button(self.frame, text='AAI', width=10, command=lambda: self._set_mode('aai'))
+        self.modes_dict['vvi'] = tk.Button(self.frame, text='VVI', width=10, command=lambda: self._set_mode('vvi'))
+        self.modes_dict['doo'] = tk.Button(self.frame, text='DOO', width=10, command=lambda: self._set_mode('doo'))
+        self.modes_dict['aoor'] = tk.Button(self.frame, text='AOOR', width=10, command=lambda: self._set_mode('aoor'))
+        self.modes_dict['voor'] = tk.Button(self.frame, text='VOOR', width=10, command=lambda: self._set_mode('voor'))
+        self.modes_dict['aair'] = tk.Button(self.frame, text='AAIR', width=10, command=lambda: self._set_mode('aair'))
+        self.modes_dict['vvir'] = tk.Button(self.frame, text='VVIR', width=10, command=lambda: self._set_mode('vvir'))
+        self.modes_dict['door'] = tk.Button(self.frame, text='DOOR', width=10, command=lambda: self._set_mode('door'))
 
         # Status
         status_label = tk.Label(self.frame, text='Status', pady=15)
