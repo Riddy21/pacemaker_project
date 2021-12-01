@@ -48,7 +48,8 @@ class GUI(object):
         self.parameters_dict = dict()
 
         # Default serial manager
-        self.serial = None
+        self.serial = SerialManager()
+        self.port_selection = None
 
     def _on_submit_login(self, username: str, password: str):
         self.user = get_user(username)
@@ -296,14 +297,16 @@ class GUI(object):
         self.modes_dict['door'].grid(row=19, column=0, rowspan=2)
 
         # Status
-        if self.serial == None:
+        if not self.serial.serialPort:
             connect_button = tk.Button(self.frame, text='Connect', width=10, height=2, command=lambda: self._setup_device())
+            self.port_selection = ttk.Combobox(self.frame, value=self.serial._get_ports())
             device_connection = tk.Label(self.frame, fg='red', text='Device disconnected')
             device_information = tk.Label(self.frame, fg='red', text='No device data\navailable')
 
             connect_button.grid(row=1, column = 3, columnspan=2)
-            device_connection.grid(row=2, column=3, columnspan=2)
-            device_information.grid(row=3, column=3, columnspan=2)
+            self.port_selection.grid(row=2, column = 3, columnspan=2)
+            device_connection.grid(row=3, column=3, columnspan=2)
+            device_information.grid(row=4, column=3, columnspan=2)
         else:
             disconnect_button = tk.Button(self.frame, text='Disconnect', width=10, height=2, command=lambda: self._disconnect_device())
             egram_label = tk.Label(self.frame, text='Electrogram')
@@ -334,14 +337,10 @@ class GUI(object):
         self.state = "DCM"
     
     def _setup_device(self):
-        self.serial = SerialManager()
 
         available_ports = self.serial._get_ports()
 
-        selectedPort = ""
-
-        while(not(selectedPort in available_ports)):
-            selectedPort = input("Select Port ")
+        selectedPort = available_ports[self.port_selection.get()]
 
         self.serial._init_serial(selectedPort)
 
@@ -427,6 +426,8 @@ class GUI(object):
         self.window.quit()
 
         self.update()
+
+        exit(0)
 
 
     # Put gui in mainloop
