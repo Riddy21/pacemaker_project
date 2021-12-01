@@ -75,27 +75,27 @@ class SerialManager(object):
             self.serialPort.write(b'\x16')
 
             #New write parameters
-            self.serialPort.write(np.unit8(OPERATING_MODE.get(parameters_dict.get('operating_mode'))))
+            self.serialPort.write(np.uint8(OPERATING_MODE.get(parameters_dict.get('operating_mode'))))
             #atrial amp     double
             if('atrial_amplitude' in valid_parameters[operating_mode]):
                 self.serialPort.write(np.double(parameters_dict.get('atrial_amplitude')))
             else:
                 self.serialPort.write(np.double(0))
-            #atrial pw      unit16
+            #atrial pw      uint16
             if('atrial_pw' in valid_parameters[operating_mode]):
-                self.serialPort.write(np.unit16(parameters_dict.get('atrial_pw')))
+                self.serialPort.write(np.uint16(parameters_dict.get('atrial_pw')))
             else:
-                self.serialPort.write(np.unit16(0))
+                self.serialPort.write(np.uint16(0))
             #arp            uint16
             if('arp' in valid_parameters[operating_mode]):
-                self.serialPort.write(np.unit16(parameters_dict.get('arp')))
+                self.serialPort.write(np.uint16(parameters_dict.get('arp')))
             else:
-                self.serialPort.write(np.unit16(0))
+                self.serialPort.write(np.uint16(0))
             #vrp            uint16
             if('vrp' in valid_parameters[operating_mode]):
-                self.serialPort.write(np.unit16(parameters_dict.get('vrp')))
+                self.serialPort.write(np.uint16(parameters_dict.get('vrp')))
             else:
-                self.serialPort.write(np.unit16(0))
+                self.serialPort.write(np.uint16(0))
             #vent amp       double
             if('ventricular_amplitude' in valid_parameters[operating_mode]):
                 self.serialPort.write(np.double(parameters_dict.get('ventricular_amplitude')))
@@ -103,14 +103,14 @@ class SerialManager(object):
                 self.serialPort.write(np.double(0))
             #vent pw        uint16
             if('ventricular_pw' in valid_parameters[operating_mode]):
-                self.serialPort.write(np.unit16(parameters_dict.get('ventricular_pw')))
+                self.serialPort.write(np.uint16(parameters_dict.get('ventricular_pw')))
             else:
-                self.serialPort.write(np.unit16(0))
+                self.serialPort.write(np.uint16(0))
             #av_delay       uint16
             if('fixed_av_delay' in valid_parameters[operating_mode]):
-                self.serialPort.write(np.unit16(parameters_dict.get('fixed_av_delay')))
+                self.serialPort.write(np.uint16(parameters_dict.get('fixed_av_delay')))
             else:
-                self.serialPort.write(np.unit16(0))
+                self.serialPort.write(np.uint16(0))
             #reaction       double
             if('reaction_time' in valid_parameters[operating_mode]):
                 self.serialPort.write(np.double(parameters_dict.get('reaction_time')))
@@ -133,9 +133,9 @@ class SerialManager(object):
                 self.serialPort.write(np.double(0))
             #lrl            uint16
             if('lrl' in valid_parameters[operating_mode]):
-                self.serialPort.write(np.unit16(parameters_dict.get('lrl')))
+                self.serialPort.write(np.uint16(parameters_dict.get('lrl')))
             else:
-                self.serialPort.write(np.unit16(0))
+                self.serialPort.write(np.uint16(0))
             
             #End flag
             self.serialPort.write(b'\x17')
