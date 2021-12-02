@@ -192,6 +192,7 @@ class SerialManager(object):
             print("recieved confirmation")
 
             for word in recieved:
+                print(word)
                 if (word == b'\x18'):
                     return True
             print(recieved)
