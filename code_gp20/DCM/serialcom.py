@@ -194,6 +194,7 @@ class SerialManager(object):
             if recieved == b'\x18':
                 return True
             else:
+                print(recieved)
                 return False
 
         else:
