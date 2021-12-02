@@ -30,8 +30,11 @@ class ParameterManager(object):
                           'vrp': <tkinter.Entry object .!frame6.!entry7>,
                           'arp': <tkinter.Entry object .!frame6.!entry8>}
         """
-        # filters required parameters from the parameters dict and saves in new dict
-        self._parameters_dict = self._find_parameters_for_mode(valid_parameters, parameters_dict)
+        try:
+            # filters required parameters from the parameters dict and saves in new dict
+            self._parameters_dict = self._find_parameters_for_mode(valid_parameters, parameters_dict)
+        except ParameterError as error:
+            return str(error)
 
     ##################
     # Public methods #
@@ -69,9 +72,12 @@ class ParameterManager(object):
         """
         _parameters_dict_new = dict()
         # Find all parameters and saves in new dict
-        for parameter in valid_parameters:
-            # NOTE: Only has strings, not entry objects
-            _parameters_dict_new[parameter] = parameters_dict[parameter].get()
+        try:
+            for parameter in valid_parameters:
+                # NOTE: Only has strings, not entry objects
+                _parameters_dict_new[parameter] = parameters_dict[parameter].get()
+        except KeyError:
+            raise ParameterError('Error: Not enough parameters have been passed to the manager')
         # Returns new dict
         return _parameters_dict_new
     
@@ -465,7 +471,7 @@ class ParameterManager(object):
         Must be one of the valid settings
         """
         if value not in ['V-Low', 'Low', 'Med-Low', 'Med', 'Med-High', 'High', 'V-High']:
-            self._parameters_dict['activity_threshold'] = ""
+            self._parameters_dict['activity_threshold'] = "Med"
             raise ParameterError('Error: Activity threshold must be one of the following settings: \
                                   V-Low, Low, Med-Low, Med, Med-High, High, V-High')
 
