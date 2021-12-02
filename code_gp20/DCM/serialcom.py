@@ -172,12 +172,8 @@ class SerialManager(object):
                     print(np.double(0).tobytes())
 
                 #lrl            uint16
-                if('lrl' in valid_parameters[operating_mode]):
-                    self.serialPort.write(np.uint16(parameters_dict['lrl']).tobytes())
-                    print(np.uint16(parameters_dict['lrl']).tobytes())
-                else:
-                    self.serialPort.write(np.uint16(0).tobytes())
-                    print(np.uint16(0).tobytes())
+                self.serialPort.write(np.uint16(parameters_dict['lower_rate_limit']).tobytes())
+                print(np.uint16(parameters_dict['lower_rate_limit']).tobytes())
                 
                 print("wrote parameters")
 
@@ -192,7 +188,7 @@ class SerialManager(object):
                 print("recieved confirmation")
 
                 for word in recieved:
-                    print(word.to_bytes())
+                    print(np.uint8(word).tobytes())
                     if (np.uint8(word).tobytes() == b'\x18'):
                         return True
                 print(recieved)
