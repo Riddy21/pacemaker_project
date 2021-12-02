@@ -191,11 +191,11 @@ class SerialManager(object):
 
             print("recieved confirmation")
 
-            if recieved[0] == b'\x18':
-                return True
-            else:
-                print(recieved)
-                return False
+            for word in recieved:
+                if (word == b'\x18'):
+                    return True
+            print(recieved)
+            return False
 
         else:
             messagebox.showerror("Error","Serial Connection not Established")
