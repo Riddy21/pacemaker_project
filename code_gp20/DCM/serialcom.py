@@ -193,7 +193,7 @@ class SerialManager(object):
 
             for word in recieved:
                 print(word.to_bytes)
-                if (np.uint8(word).tobytes == b'\x18'):
+                if (np.uint8(word).tobytes() == b'\x18'):
                     return True
             print(recieved)
             return False
