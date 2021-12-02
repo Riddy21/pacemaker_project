@@ -187,11 +187,11 @@ class SerialManager(object):
             print("wrote end flag")
 
             #Wait for confirmation
-            recieved = self.serialPort.read(1)
+            recieved = self.serialPort.read(17)
 
             print("recieved confirmation")
 
-            if recieved == b'\x18':
+            if recieved[0] == b'\x18':
                 return True
             else:
                 print(recieved)
