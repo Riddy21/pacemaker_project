@@ -74,105 +74,105 @@ class SerialManager(object):
             #Start Flag
             self.serialPort.write(b'\x16')
             print(b'\x16')
-            print("wrote start flag")
+            print("wrote start flag",end="")
 
             #operating mode uint8
             self.serialPort.write(np.uint8(OPERATING_MODE[operating_mode]))
             print(np.uint8(OPERATING_MODE[operating_mode]))
-            print("wrote operating mode")
+            print("wrote operating mode",end="")
 
             #atrial amp     double
             if('atrial_amplitude' in valid_parameters[operating_mode]):
                 self.serialPort.write(np.double(parameters_dict['atrial_amplitude']))
-                print(np.double(parameters_dict['atrial_amplitude']))
+                print(np.double(parameters_dict['atrial_amplitude']),end="")
             else:
                 self.serialPort.write(np.double(0))
-                print(np.double(0))
+                print(np.double(0),end="")
 
             #atrial pw      uint16
             if('atrial_pw' in valid_parameters[operating_mode]):
                 self.serialPort.write(np.uint16(parameters_dict['atrial_pw']))
-                print(np.uint16(parameters_dict['atrial_pw']))
+                print(np.uint16(parameters_dict['atrial_pw']),end="")
             else:
                 self.serialPort.write(np.uint16(0))
-                print(np.uint16(0))
+                print(np.uint16(0),end="")
 
             #arp            uint16
             if('arp' in valid_parameters[operating_mode]):
                 self.serialPort.write(np.uint16(parameters_dict['arp']))
-                print(np.uint16(parameters_dict['arp']))
+                print(np.uint16(parameters_dict['arp']),end="")
             else:
                 self.serialPort.write(np.uint16(0))
-                print(np.uint16(0))
+                print(np.uint16(0),end="")
 
             #vrp            uint16
             if('vrp' in valid_parameters[operating_mode]):
                 self.serialPort.write(np.uint16(parameters_dict['vrp']))
-                print(np.uint16(parameters_dict['vrp']))
+                print(np.uint16(parameters_dict['vrp']),end="")
             else:
                 self.serialPort.write(np.uint16(0))
-                print(np.uint16(0))
+                print(np.uint16(0),end="")
 
             #vent amp       double
             if('ventricular_amplitude' in valid_parameters[operating_mode]):
                 self.serialPort.write(np.double(parameters_dict['ventricular_amplitude']))
-                print(np.double(parameters_dict['ventricular_amplitude']))
+                print(np.double(parameters_dict['ventricular_amplitude']),end="")
             else:
                 self.serialPort.write(np.double(0))
-                print(np.double(0))
+                print(np.double(0),end="")
 
             #vent pw        uint16
             if('ventricular_pw' in valid_parameters[operating_mode]):
                 self.serialPort.write(np.uint16(parameters_dict['ventricular_pw']))
-                print(np.uint16(parameters_dict['ventricular_pw']))
+                print(np.uint16(parameters_dict['ventricular_pw']),end="")
             else:
                 self.serialPort.write(np.uint16(0))
-                print(np.uint16(0))
+                print(np.uint16(0),end="")
 
             #av_delay       uint16
             if('fixed_av_delay' in valid_parameters[operating_mode]):
                 self.serialPort.write(np.uint16(parameters_dict['fixed_av_delay']))
-                print(np.uint16(parameters_dict['fixed_av_delay']))
+                print(np.uint16(parameters_dict['fixed_av_delay']),end="")
             else:
                 self.serialPort.write(np.uint16(0))
-                print(np.uint16(0))
+                print(np.uint16(0),end="")
 
             #reaction       double
             if('reaction_time' in valid_parameters[operating_mode]):
                 self.serialPort.write(np.double(parameters_dict['reaction_time']))
-                print(np.double(parameters_dict['reaction_time']))
+                print(np.double(parameters_dict['reaction_time']),end="")
             else:
                 self.serialPort.write(np.double(0))
-                print(np.double(0))
+                print(np.double(0),end="")
 
             #recovery       double
             if('recovery_time' in valid_parameters[operating_mode]):
                 self.serialPort.write(np.double(parameters_dict['recovery_time']))
-                print(np.double(parameters_dict['recovery_time']))
+                print(np.double(parameters_dict['recovery_time']),end="")
             else:
                 self.serialPort.write(np.double(0))
-                print(np.double(0))
+                print(np.double(0),end="")
 
             #threshold      single
             if('activity_threshold' in valid_parameters[operating_mode]):
                 self.serialPort.write(np.single(ACTIVITY_THRESHOLD[parameters_dict['activity_threshold']]))
-                print(np.single(ACTIVITY_THRESHOLD[parameters_dict['activity_threshold']]))
+                print(np.single(ACTIVITY_THRESHOLD[parameters_dict['activity_threshold']]),end="")
             else:
                 self.serialPort.write(np.single(0))
-                print(np.single(0))
+                print(np.single(0),end="")
 
             #msr            double
             if('max_sensor_rate' in valid_parameters[operating_mode]):
                 self.serialPort.write(np.double(parameters_dict['max_sensor_rate']))
-                print(np.double(parameters_dict['max_sensor_rate']))
+                print(np.double(parameters_dict['max_sensor_rate']),end="")
             else:
                 self.serialPort.write(np.double(0))
-                print(np.double(0))
+                print(np.double(0),end="")
 
             #lrl            uint16
             if('lrl' in valid_parameters[operating_mode]):
                 self.serialPort.write(np.uint16(parameters_dict['lrl']))
-                print(np.uint16(parameters_dict['lrl']))
+                print(np.uint16(parameters_dict['lrl']),end="")
             else:
                 self.serialPort.write(np.uint16(0))
                 print(np.uint16(0))
